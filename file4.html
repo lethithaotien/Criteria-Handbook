@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Master Chef English - Food Critic Edition</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,600&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f1f5f9; /* slate-100 */
+            color: #1e293b;
+        }
+
+        .heading-font {
+            font-family: 'Playfair Display', serif;
+        }
+
+        @keyframes pulse-ring {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.5); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+
+        .mic-recording {
+            animation: pulse-ring 1.5s infinite !important;
+            background-color: #ef4444 !important; /* red-500 */
+            color: white !important;
+            border-color: #dc2626 !important;
+        }
+
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        .word-correct { color: #16a34a; font-weight: 600; }
+        .word-incorrect { color: #ef4444; text-decoration: line-through; opacity: 0.8; cursor: help; margin: 0 2px; }
+        .word-missing { color: #64748b; font-style: italic; border-bottom: 2px dotted #cbd5e1; cursor: help; margin: 0 2px; }
+    </style>
+</head>
+<body class="min-h-screen p-0 md:p-6 lg:p-8">
+
+    <!-- Đổi từ h-screen sang auto để không bị cắt trên điện thoại -->
+    <div class="w-full max-w-6xl mx-auto bg-white md:rounded-3xl shadow-xl border border-slate-200 overflow-hidden flex flex-col md:flex-row h-auto md:h-[850px]">
+        
+        <!-- Cột trái: Danh sách bài học -->
+        <div class="w-full md:w-80 bg-slate-50 border-b md:border-b-0 md:border-r border-slate-200 flex flex-col flex-shrink-0 h-[35vh] md:h-full">
+            <div class="p-4 md:p-5 border-b border-slate-200 bg-white sticky top-0 z-10 shadow-sm flex-shrink-0">
+                <div class="flex items-center gap-2 text-amber-600 mb-1">
+                    <i class="fas fa-utensils"></i>
+                    <h2 class="text-xs font-bold tracking-widest uppercase">Master Chef</h2>
+                </div>
+                <h1 class="heading-font text-xl md:text-2xl text-slate-800">The Food Critic</h1>
+                <p class="text-xs text-slate-500 mt-1">Chọn câu để luyện nói</p>
+            </div>
+            
+            <div class="flex-1 overflow-y-auto p-2 md:p-3 space-y-2" id="lesson-list">
+                <!-- Danh sách bài học -->
+                <div class="p-4 text-center text-sm text-slate-500 animate-pulse">Đang tải danh sách...</div>
+            </div>
+        </div>
+
+        <!-- Cột phải: Khu vực luyện tập -->
+        <div class="flex-1 flex flex-col bg-white relative overflow-y-auto h-auto md:h-full">
+            
+            <!-- Banner cảnh báo lỗi Mic (Đã cập nhật chi tiết cho Google Sites) -->
+            <div id="mic-permission-banner" class="hidden bg-red-50 border-b border-red-100 p-4 text-red-800 text-sm flex-col gap-2">
+                <div class="flex items-start gap-2 font-medium">
+                    <i class="fas fa-exclamation-triangle text-red-600 mt-0.5"></i>
+                    <span>Không thể truy cập Micro!</span>
+                </div>
+                <p class="text-xs text-red-700 ml-6">
+                    Nếu bạn đang xem trên Google Sites qua tính năng "Nhúng mã", hệ thống sẽ chặn Micro. Vui lòng mở trang web này ở một Tab mới hoặc host code trên nền tảng khác và "Nhúng qua URL". Nếu không, hãy kiểm tra quyền Micro trên thanh địa chỉ.
+                </p>
+            </div>
+
+            <!-- Header & Nút chức năng -->
+            <div class="p-5 md:p-8 bg-white z-0">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="inline-block px-3 py-1 bg-blue-50 text-blue-700 text-xs font-bold rounded-full uppercase tracking-wider" id="current-lesson-number">Bài 1 / 10</span>
+                    
+                    <div class="flex gap-2">
+                        <button id="btn-prev" class="px-3 py-1.5 bg-slate-100 text-slate-600 hover:bg-slate-200 rounded-lg text-sm font-medium transition-colors disabled:opacity-30 disabled:cursor-not-allowed flex items-center">
+                            <i class="fas fa-chevron-left mr-1.5 text-xs"></i> Quay lại
+                        </button>
+                        <button id="btn-next" class="px-3 py-1.5 bg-blue-600 text-white hover:bg-blue-700 rounded-lg text-sm font-medium transition-colors disabled:opacity-30 disabled:cursor-not-allowed flex items-center shadow-sm">
+                            Tiếp theo <i class="fas fa-chevron-right ml-1.5 text-xs"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <h2 class="text-2xl md:text-3xl font-semibold text-slate-800 leading-snug mb-6" id="target-sentence">
+                    Đang tải câu mẫu...
+                </h2>
+                
+                <!-- Gom cụm nút Nghe và Nói lại cạnh nhau -->
+                <div class="flex flex-wrap items-center gap-4 bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                    <button id="btn-play-audio" class="inline-flex items-center gap-2 px-6 py-3 bg-slate-800 text-white hover:bg-slate-700 rounded-full font-medium transition-colors shadow-sm disabled:opacity-50 text-sm">
+                        <i class="fas fa-volume-up text-base"></i>
+                        <span>Nghe Giám Khảo</span>
+                    </button>
+                    
+                    <div class="w-px h-8 bg-slate-300 hidden sm:block"></div>
+                    
+                    <button id="btn-record" class="w-12 h-12 rounded-full bg-white border-2 border-slate-300 text-slate-500 hover:text-red-500 hover:border-red-200 shadow-sm flex items-center justify-center text-xl transition-all duration-300 flex-shrink-0" title="Nhấn để nói">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                    
+                    <div class="flex flex-col">
+                        <span id="recording-status" class="text-sm text-slate-600 font-medium">Nhấn Mic để đọc lại</span>
+                        <span id="speaking-indicator" class="hidden text-xs text-blue-600 font-medium animate-pulse mt-0.5">
+                            <i class="fas fa-satellite-dish mr-1"></i> Đang đọc...
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Bảng Kết quả (Nằm ngay dưới cụm nút, ẩn mặc định) -->
+                <div id="result-container" class="hidden mt-6 w-full bg-white rounded-2xl shadow-sm border border-slate-200 p-5 md:p-6 transition-all duration-500">
+                    <div class="flex justify-between items-center mb-4 pb-4 border-b border-slate-100">
+                        <h3 class="text-sm font-bold text-slate-700">Kết quả phân tích</h3>
+                        <div class="flex items-baseline gap-1">
+                            <span class="text-3xl font-black" id="score-percentage">0%</span>
+                            <span class="text-xs text-slate-400 font-medium">Chính xác</span>
+                        </div>
+                    </div>
+                    
+                    <p id="user-speech-output" class="text-lg md:text-xl leading-relaxed text-slate-700"></p>
+                    
+                    <div class="flex flex-wrap gap-4 mt-5 pt-4 border-t border-slate-50 text-xs text-slate-500 justify-start sm:justify-center">
+                        <span class="flex items-center gap-1.5"><i class="fas fa-check-circle text-green-600"></i> Đúng</span>
+                        <span class="flex items-center gap-1.5"><i class="fas fa-times-circle text-red-500"></i> Sai / Thừa</span>
+                        <span class="flex items-center gap-1.5"><i class="fas fa-minus-circle text-slate-400"></i> Bỏ sót</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Phần Giải thích (Chef's Notes) -->
+            <div class="flex-1 bg-white border-t border-slate-100">
+                <div class="p-5 md:p-8">
+                    <div class="flex items-center gap-2 text-indigo-700 mb-4">
+                        <i class="fas fa-graduation-cap text-xl"></i>
+                        <h3 class="font-bold text-lg">Phân tích Chuyên sâu (Chef's Notes)</h3>
+                    </div>
+                    
+                    <div id="explanation-content" class="space-y-5">
+                        <!-- Nội dung sẽ được tiêm vào đây -->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // Dữ liệu 10 câu mẫu (Đã giữ nguyên dữ liệu từ vựng & IPA)
+        const lessons = [
+            {
+                id: 1,
+                sentence: "The execution of this dish is absolutely flawless, yet it lacks a certain soul.",
+                translation: "Kỹ thuật thực hiện món ăn này hoàn toàn không có điểm chê, nhưng nó lại thiếu đi một chút hồn.",
+                vocab: [
+                    { word: "execution", phonetic: "ˌeksɪˈkjuːʃn", meaning: "kỹ thuật thực hiện, cách làm" },
+                    { word: "flawless", phonetic: "ˈflɔːləs", meaning: "hoàn hảo, không tì vết" }
+                ],
+                grammar: "Cấu trúc '... is absolutely flawless, yet ...' dùng để tạo sự tương phản mạnh mẽ giữa kỹ thuật hoàn hảo và sự thiếu hụt về cảm xúc.",
+                context: "Dùng khi bạn thưởng thức một món ăn được làm đúng sách vở, trình bày đẹp, kỹ thuật cao (ví dụ thái rau củ đều tăm tắp, thịt chín đúng nhiệt độ), nhưng hương vị lại nhàm chán, không gợi lên cảm xúc hay câu chuyện nào của người đầu bếp."
+            },
+            {
+                id: 2,
+                sentence: "The acidity cuts beautifully through the richness of the pork belly.",
+                translation: "Độ chua cân bằng một cách tuyệt vời với sự béo ngậy của thịt ba chỉ.",
+                vocab: [
+                    { word: "acidity", phonetic: "əˈsɪdəti", meaning: "độ chua" },
+                    { word: "cut through", phonetic: "kʌt θruː", meaning: "cắt ngang, làm dịu đi (sự ngấy)" },
+                    { word: "richness", phonetic: "ˈrɪtʃnəs", meaning: "sự béo ngậy, đậm đà" }
+                ],
+                grammar: "Động từ 'cuts through' được dùng theo nghĩa bóng (metaphor), miêu tả việc vị chua phá vỡ cảm giác ngấy mỡ trong vòm miệng.",
+                context: "Câu nhận xét kinh điển khi đánh giá các món ăn có nhiều mỡ hoặc bơ. Sự hiện diện của thành phần có tính axit (chanh, giấm, ngâm chua) là bắt buộc để nâng tầm món ăn."
+            },
+            {
+                id: 3,
+                sentence: "I appreciate the boldness of the concept, but the flavors are entirely disjointed.",
+                translation: "Tôi đánh giá cao sự táo bạo của ý tưởng, nhưng các hương vị lại hoàn toàn rời rạc.",
+                vocab: [
+                    { word: "boldness", phonetic: "ˈbəʊldnəs", meaning: "sự táo bạo" },
+                    { word: "disjointed", phonetic: "dɪsˈdʒɔɪntɪd", meaning: "rời rạc, không liên kết" }
+                ],
+                grammar: "'Appreciate... but...' là cách nói giảm nói tránh lịch sự trước khi đưa ra một lời chê bai nặng nề về tổng thể món ăn.",
+                context: "Dùng khi đầu bếp cố gắng sáng tạo, kết hợp những nguyên liệu kỳ lạ với nhau (fusion) nhưng thất bại trong việc tạo ra một hương vị thống nhất. Mọi thứ trên đĩa đang 'đánh nhau'."
+            },
+            {
+                id: 4,
+                sentence: "The delicate flavors of the scallop are completely overpowered by the heavy sauce.",
+                translation: "Hương vị tinh tế của sò điệp bị lấn át hoàn toàn bởi loại nước sốt quá nồng.",
+                vocab: [
+                    { word: "delicate", phonetic: "ˈdelɪkət", meaning: "tinh tế, nhẹ nhàng, dễ vỡ" },
+                    { word: "scallop", phonetic: "ˈskɒləp", meaning: "sò điệp" },
+                    { word: "overpowered", phonetic: "ˌəʊvəˈpaʊəd", meaning: "bị lấn át, áp đảo" }
+                ],
+                grammar: "Câu bị động 'are completely overpowered by' nhấn mạnh việc nguyên liệu chính (sò điệp) đã trở thành nạn nhân của sai lầm trong việc dùng sốt.",
+                context: "Lỗi phổ biến: Khi nguyên liệu chính là đồ hải sản có vị ngọt thanh tự nhiên, nhưng đầu bếp lại dùng một loại sốt có vị quá gắt (cay, mặn, nồng mùi tỏi) làm mất đi vị nguyên bản."
+            },
+            {
+                id: 5,
+                sentence: "This plate takes me back to my childhood; it is pure, unadulterated comfort on a plate.",
+                translation: "Đĩa thức ăn này đưa tôi về tuổi thơ; nó mang lại một cảm giác an ủi thuần khiết, không pha tạp trên một chiếc đĩa.",
+                vocab: [
+                    { word: "unadulterated", phonetic: "ˌʌnəˈdʌltəreɪtɪd", meaning: "không pha tạp, nguyên chất" },
+                    { word: "comfort", phonetic: "ˈkʌmfət", meaning: "sự an ủi (comfort food: thức ăn mang lại cảm giác hoài niệm)" }
+                ],
+                grammar: "Thành ngữ 'takes me back to...' dùng để miêu tả khả năng gợi nhớ ký ức mạnh mẽ của ẩm thực.",
+                context: "Lời khen ngợi cao nhất dành cho một món ăn truyền thống, giản dị. Món ăn không cần kỹ thuật phức tạp, chỉ cần hương vị chân thật, làm chạm đến trái tim người thưởng thức."
+            },
+            {
+                id: 6,
+                sentence: "The texture is deeply satisfying, offering a brilliant contrast between the crispy exterior and the tender center.",
+                translation: "Kết cấu món ăn mang lại sự thỏa mãn sâu sắc, tạo ra một sự tương phản tuyệt vời giữa lớp vỏ giòn rụm và phần lõi mềm mại.",
+                vocab: [
+                    { word: "texture", phonetic: "ˈtekstʃə(r)", meaning: "kết cấu (độ giòn, mềm, dai...)" },
+                    { word: "contrast", phonetic: "ˈkɒntrɑːst", meaning: "sự tương phản" },
+                    { word: "tender", phonetic: "ˈtendə(r)", meaning: "mềm" }
+                ],
+                grammar: "Sử dụng các cặp tính từ đối lập 'crispy exterior' vs 'tender center' để nhấn mạnh kỹ thuật nấu ăn xuất sắc.",
+                context: "Dùng để đánh giá các món chiên, áp chảo hoặc nướng (ví dụ: bít tết, gà rán). Đạt được sự tương phản kết cấu là tiêu chuẩn vàng của một món ăn ngon."
+            },
+            {
+                id: 7,
+                sentence: "There is an unfortunate chalkiness to the puree that detracts from the entire experience.",
+                translation: "Đáng tiếc là có một độ bột/sượng trong lớp sốt đặc, làm giảm đi toàn bộ trải nghiệm.",
+                vocab: [
+                    { word: "chalkiness", phonetic: "ˈtʃɔːkinəs", meaning: "cảm giác lợn cợn như phấn/bột" },
+                    { word: "puree", phonetic: "ˈpjʊəreɪ", meaning: "thực phẩm xay nhuyễn (thường là rau củ)" },
+                    { word: "detracts from", phonetic: "dɪˈtrækts frɒm", meaning: "làm giảm giá trị của" }
+                ],
+                grammar: "Cấu trúc 'There is an unfortunate [danh từ] to...' là một cách phê bình chuyên nghiệp, chỉ đích danh khuyết điểm trong kết cấu.",
+                context: "Dùng khi đánh giá lỗi kỹ thuật. Ví dụ khoai tây nghiền (mashed potatoes) chưa được rây kỹ, để lại cảm giác lợn cợn trong miệng thay vì mịn màng (silky smooth)."
+            },
+            {
+                id: 8,
+                sentence: "The seasoning is spot on, elevating the natural profile of the ingredients rather than masking them.",
+                translation: "Việc nêm nếm gia vị vô cùng chuẩn xác, nâng tầm hương vị tự nhiên của nguyên liệu thay vì che đậy chúng.",
+                vocab: [
+                    { word: "seasoning", phonetic: "ˈsiːzənɪŋ", meaning: "việc nêm nếm gia vị" },
+                    { word: "spot on", phonetic: "spɒt ɒn", meaning: "hoàn toàn chính xác" },
+                    { word: "elevating", phonetic: "ˈelɪveɪtɪŋ", meaning: "nâng tầm" },
+                    { word: "masking", phonetic: "ˈmɑːskɪŋ", meaning: "che giấu, đậy đi" }
+                ],
+                grammar: "Cấu trúc '... rather than ...' (thay vì) so sánh hai cách dùng gia vị: một cách để tôn vinh, một cách để che giấu.",
+                context: "Một lời khen dành cho người đầu bếp hiểu rõ nguyên liệu của mình. Họ chỉ dùng gia vị vừa đủ để làm nguyên liệu chính tỏa sáng, chứng tỏ nguyên liệu rất tươi ngon."
+            },
+            {
+                id: 9,
+                sentence: "It visually promises a symphony of flavors, but on the palate, it falls devastatingly flat.",
+                translation: "Về mặt thị giác, nó hứa hẹn một bản giao hưởng của hương vị, nhưng khi nếm thử, nó lại nhạt nhẽo đến mức thất vọng.",
+                vocab: [
+                    { word: "symphony", phonetic: "ˈsɪmfəni", meaning: "bản giao hưởng (chỉ sự phức tạp, hài hòa)" },
+                    { word: "palate", phonetic: "ˈpælət", meaning: "vị giác, vòm miệng" },
+                    { word: "falls flat", phonetic: "fɔːlz flæt", meaning: "thất bại, nhạt nhẽo, không ấn tượng" }
+                ],
+                grammar: "Sử dụng nghệ thuật ẩn dụ (metaphor) 'symphony of flavors' kết hợp với sự đối lập giữa 'visually' (thị giác) và 'on the palate' (vị giác).",
+                context: "Dùng cho những món ăn 'có đỏ mà không có thơm'. Trình bày xuất sắc, màu sắc rực rỡ, nhìn rất ngon mắt nhưng khi ăn vào thì vô vị, thiếu gia vị hoặc thiếu chiều sâu."
+            },
+            {
+                id: 10,
+                sentence: "This is a triumph of modern gastronomy, pushing boundaries without losing sight of fundamental taste.",
+                translation: "Đây là một sự đắc thắng của nền ẩm thực hiện đại, vượt qua những ranh giới mà không hề đánh mất đi nền tảng của hương vị.",
+                vocab: [
+                    { word: "triumph", phonetic: "ˈtraɪʌmf", meaning: "sự chiến thắng, thành tựu lớn" },
+                    { word: "gastronomy", phonetic: "ɡæˈstrɒnəmi", meaning: "nghệ thuật ẩm thực" },
+                    { word: "pushing boundaries", phonetic: "ˈpʊʃɪŋ ˈbaʊndəriz", meaning: "phá vỡ ranh giới, tiên phong" }
+                ],
+                grammar: "Sử dụng phân từ hiện tại (present participle) 'pushing' và 'losing' để bổ nghĩa cho toàn bộ mệnh đề trước đó.",
+                context: "Lời khen tột bậc dành cho các đầu bếp Michelin. Khi họ sử dụng các kỹ thuật tiên tiến, tạo ra hình dáng kỳ lạ, nhưng khi nhắm mắt lại ăn, hương vị vẫn vô cùng tuyệt hảo."
+            }
+        ];
+
+        let currentLessonIndex = 0;
+
+        // --- DOM Elements ---
+        const lessonListEl = document.getElementById('lesson-list');
+        const targetSentenceEl = document.getElementById('target-sentence');
+        const currentLessonNumEl = document.getElementById('current-lesson-number');
+        
+        const btnPrev = document.getElementById('btn-prev');
+        const btnNext = document.getElementById('btn-next');
+        
+        const explanationContentEl = document.getElementById('explanation-content');
+        const btnPlayAudio = document.getElementById('btn-play-audio');
+        const speakingIndicator = document.getElementById('speaking-indicator');
+        
+        const btnRecord = document.getElementById('btn-record');
+        const recordingStatus = document.getElementById('recording-status');
+        const resultContainer = document.getElementById('result-container');
+        const userSpeechOutput = document.getElementById('user-speech-output');
+        const scorePercentageEl = document.getElementById('score-percentage');
+        const micPermissionBanner = document.getElementById('mic-permission-banner');
+
+        // --- 1. Text to Speech (Synthesis) ---
+        const synth = window.speechSynthesis;
+        let voices = [];
+
+        function populateVoiceList() {
+            voices = synth.getVoices();
+        }
+
+        if (speechSynthesis.onvoiceschanged !== undefined) {
+            speechSynthesis.onvoiceschanged = populateVoiceList;
+        }
+
+        function playAudio(text, isWord = false) {
+            if (synth.speaking) return;
+            if (voices.length === 0) populateVoiceList();
+
+            const utterThis = new SpeechSynthesisUtterance(text);
+            let selectedVoice = voices.find(v => v.lang === 'en-GB' || v.lang === 'en-US');
+            if(selectedVoice) utterThis.voice = selectedVoice;
+            
+            utterThis.pitch = 1;
+            // Đọc chậm 0.7 cho câu dài, đọc bình thường 0.85 cho từ vựng
+            utterThis.rate = isWord ? 0.85 : 0.7; 
+
+            if (!isWord) {
+                utterThis.onstart = () => {
+                    btnPlayAudio.disabled = true;
+                    btnPlayAudio.classList.add('opacity-50');
+                    speakingIndicator.classList.remove('hidden');
+                    speakingIndicator.classList.add('inline-flex');
+                };
+
+                utterThis.onend = () => {
+                    btnPlayAudio.disabled = false;
+                    btnPlayAudio.classList.remove('opacity-50');
+                    speakingIndicator.classList.add('hidden');
+                    speakingIndicator.classList.remove('inline-flex');
+                };
+            }
+
+            synth.speak(utterThis);
+        }
+
+        // Cập nhật hàm gọi ngoài giao diện (tránh lỗi scope)
+        window.playWordAudio = function(word) {
+            playAudio(word, true);
+        }
+
+        // --- 2. Speech to Text (Recognition) ---
+        window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        let recognition = null;
+        let isRecording = false;
+
+        if (window.SpeechRecognition) {
+            recognition = new SpeechRecognition();
+            recognition.continuous = false;
+            recognition.lang = 'en-US'; 
+            recognition.interimResults = false;
+            recognition.maxAlternatives = 1;
+
+            recognition.onstart = () => {
+                isRecording = true;
+                btnRecord.classList.add('mic-recording');
+                recordingStatus.innerHTML = '<span class="text-red-500 font-bold">Đang lắng nghe... Hãy đọc câu trên.</span>';
+                resultContainer.classList.add('hidden');
+                micPermissionBanner.classList.add('hidden'); // Ẩn banner lỗi nếu đang chạy được
+            };
+
+            recognition.onspeechend = () => {
+                recognition.stop();
+            };
+
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                analyzeSpeech(transcript, lessons[currentLessonIndex].sentence);
+            };
+
+            recognition.onerror = (event) => {
+                isRecording = false;
+                btnRecord.classList.remove('mic-recording');
+                
+                if (event.error === 'not-allowed') {
+                    recordingStatus.innerHTML = "<span class='text-red-500'>Micro bị chặn!</span>";
+                    micPermissionBanner.classList.remove('hidden');
+                    micPermissionBanner.classList.add('flex');
+                } else if (event.error === 'no-speech') {
+                    recordingStatus.textContent = "Không nghe thấy tiếng. Vui lòng thử lại.";
+                } else {
+                    recordingStatus.textContent = `Lỗi: ${event.error}`;
+                }
+            };
+
+            recognition.onend = () => {
+                if(!resultContainer.classList.contains('hidden')){
+                    recordingStatus.textContent = "Nhấn Mic để đọc lại";
+                }
+                isRecording = false;
+                btnRecord.classList.remove('mic-recording');
+            };
+        } else {
+            recordingStatus.textContent = "Trình duyệt không hỗ trợ Web Speech API.";
+            btnRecord.disabled = true;
+            btnRecord.classList.add('opacity-50', 'cursor-not-allowed');
+        }
+
+        // --- 3. UI Logic & Diffing Algorithm ---
+        function loadLessonList() {
+            lessonListEl.innerHTML = '';
+            lessons.forEach((lesson, index) => {
+                const btn = document.createElement('button');
+                btn.className = `w-full text-left p-3 rounded-xl mb-2 transition-all duration-200 border ${
+                    index === currentLessonIndex 
+                    ? 'bg-blue-50 border-blue-200 shadow-sm' 
+                    : 'bg-white border-transparent hover:bg-slate-100'
+                }`;
+                btn.innerHTML = `
+                    <div class="flex items-start gap-3">
+                        <div class="flex-shrink-0 w-6 h-6 rounded-full ${index === currentLessonIndex ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-600'} flex items-center justify-center text-xs font-bold mt-0.5">
+                            ${lesson.id}
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium ${index === currentLessonIndex ? 'text-blue-900' : 'text-slate-700'} line-clamp-2">${lesson.sentence}</p>
+                        </div>
+                    </div>
+                `;
+                btn.onclick = () => selectLesson(index);
+                lessonListEl.appendChild(btn);
+            });
+        }
+
+        function selectLesson(index) {
+            currentLessonIndex = index;
+            const lesson = lessons[index];
+            
+            currentLessonNumEl.textContent = `Bài ${index + 1} / ${lessons.length}`;
+            targetSentenceEl.textContent = lesson.sentence;
+            
+            btnPrev.disabled = index === 0;
+            btnNext.disabled = index === lessons.length - 1;
+            
+            resultContainer.classList.add('hidden');
+            recordingStatus.textContent = "Nhấn Mic để đọc câu trên";
+
+            let vocabHtml = lesson.vocab.map(v => 
+                `<li class="mb-3 flex items-start gap-2.5">
+                    <button onclick="window.playWordAudio('${v.word.replace(/'/g, "\\'")}')" class="text-blue-500 hover:text-white bg-blue-50 hover:bg-blue-500 p-1.5 rounded-md flex-shrink-0 transition-colors shadow-sm mt-0.5 border border-blue-100" title="Nghe phát âm">
+                        <i class="fas fa-volume-up text-xs w-3 h-3 flex items-center justify-center"></i>
+                    </button>
+                    <div class="flex flex-col">
+                        <div class="flex items-baseline gap-1.5">
+                            <span class="font-bold text-slate-800 text-base">${v.word}</span>
+                            <span class="text-indigo-600 font-mono text-sm opacity-80">/${v.phonetic}/</span>
+                        </div>
+                        <span class="text-slate-600 mt-0.5">${v.meaning}</span>
+                    </div>
+                </li>`
+            ).join('');
+
+            explanationContentEl.innerHTML = `
+                <div class="p-4 bg-indigo-50/50 rounded-xl border border-indigo-100">
+                    <h4 class="text-xs font-bold text-indigo-500 uppercase tracking-wider mb-2">Dịch nghĩa</h4>
+                    <p class="text-slate-800 font-medium">${lesson.translation}</p>
+                </div>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mt-4">
+                    <div>
+                        <h4 class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2"><i class="fas fa-spell-check text-slate-400"></i> Từ vựng khóa</h4>
+                        <ul class="text-sm text-slate-600 list-none">${vocabHtml}</ul>
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-bold text-slate-800 mb-2 flex items-center gap-2"><i class="fas fa-link text-slate-400"></i> Ngữ pháp & Cấu trúc</h4>
+                        <p class="text-sm text-slate-600 leading-relaxed">${lesson.grammar}</p>
+                    </div>
+                </div>
+
+                <div class="mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200/50">
+                    <h4 class="text-xs font-bold text-amber-700 uppercase tracking-wider mb-2 flex items-center gap-2">
+                        <i class="fas fa-lightbulb"></i> Bối cảnh thực tế
+                    </h4>
+                    <p class="text-sm text-slate-700 leading-relaxed">${lesson.context}</p>
+                </div>
+            `;
+
+            loadLessonList(); 
+            if(synth.speaking) synth.cancel(); 
+        }
+
+        function analyzeSpeech(spoken, target) {
+            const cleanStr = (str) => str.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").trim();
+            const targetWords = cleanStr(target).split(/\s+/);
+            const spokenWords = cleanStr(spoken).split(/\s+/);
+            
+            let htmlOutput = [];
+            let correctCount = 0;
+            let targetIndex = 0;
+            let spokenIndex = 0;
+
+            while (targetIndex < targetWords.length || spokenIndex < spokenWords.length) {
+                const targetW = targetWords[targetIndex];
+                const spokenW = spokenWords[spokenIndex];
+
+                if (targetW === spokenW && targetW !== undefined) {
+                    htmlOutput.push(`<span class="word-correct">${targetW}</span>`);
+                    correctCount++;
+                    targetIndex++;
+                    spokenIndex++;
+                } else {
+                    let foundInFutureTarget = false;
+                    for (let i = 1; i <= 2 && targetIndex + i < targetWords.length; i++) {
+                        if (targetWords[targetIndex + i] === spokenW) { foundInFutureTarget = true; break; }
+                    }
+
+                    let foundInFutureSpoken = false;
+                    for (let i = 1; i <= 2 && spokenIndex + i < spokenWords.length; i++) {
+                        if (spokenWords[spokenIndex + i] === targetW) { foundInFutureSpoken = true; break; }
+                    }
+
+                    if (foundInFutureTarget) {
+                        htmlOutput.push(`<span class="word-missing" title="Bạn đã bỏ sót từ này">${targetW}</span>`);
+                        targetIndex++;
+                    } else if (foundInFutureSpoken) {
+                        htmlOutput.push(`<span class="word-incorrect" title="Từ thừa">${spokenW}</span>`);
+                        spokenIndex++;
+                    } else {
+                        if (targetW !== undefined) {
+                            if (spokenW !== undefined) {
+                                htmlOutput.push(`<span class="word-incorrect" title="Bạn đã nói: ${spokenW}">${targetW}</span>`);
+                                spokenIndex++;
+                            } else {
+                                htmlOutput.push(`<span class="word-missing" title="Bạn đã bỏ sót từ này">${targetW}</span>`);
+                            }
+                            targetIndex++;
+                        } else {
+                            htmlOutput.push(`<span class="word-incorrect" title="Từ thừa">${spokenW}</span>`);
+                            spokenIndex++;
+                        }
+                    }
+                }
+            }
+
+            const accuracy = Math.round((correctCount / targetWords.length) * 100);
+            userSpeechOutput.innerHTML = htmlOutput.join(' ');
+            
+            scorePercentageEl.className = 'text-3xl font-black ';
+            if (accuracy >= 80) scorePercentageEl.classList.add('text-green-600');
+            else if (accuracy >= 50) scorePercentageEl.classList.add('text-amber-500');
+            else scorePercentageEl.classList.add('text-red-500');
+
+            resultContainer.classList.remove('hidden');
+            recordingStatus.textContent = "Kết quả phân tích bên dưới";
+            
+            let currentScore = 0;
+            const scoreInterval = setInterval(() => {
+                if (currentScore >= accuracy) {
+                    clearInterval(scoreInterval);
+                    scorePercentageEl.textContent = `${accuracy}%`;
+                } else {
+                    currentScore += (accuracy > 50 ? 2 : 1);
+                    if(currentScore > accuracy) currentScore = accuracy;
+                    scorePercentageEl.textContent = `${currentScore}%`;
+                }
+            }, 15);
+        }
+
+        btnPlayAudio.addEventListener('click', () => {
+            playAudio(lessons[currentLessonIndex].sentence);
+        });
+
+        btnRecord.addEventListener('click', () => {
+            if (!recognition) return;
+            if (isRecording) {
+                recognition.stop();
+            } else {
+                try { recognition.start(); } 
+                catch (e) { console.error("Recognition start error:", e); }
+            }
+        });
+
+        btnPrev.addEventListener('click', () => {
+            if (currentLessonIndex > 0) {
+                selectLesson(currentLessonIndex - 1);
+            }
+        });
+
+        btnNext.addEventListener('click', () => {
+            if (currentLessonIndex < lessons.length - 1) {
+                selectLesson(currentLessonIndex + 1);
+            }
+        });
+
+        function initApp() {
+            populateVoiceList();
+            loadLessonList();
+            selectLesson(0);
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initApp);
+        } else {
+            initApp(); 
+        }
+    </script>
+</body>
+</html>

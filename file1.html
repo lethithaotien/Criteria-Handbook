@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criteria Handbook - Cẩm nang Tiêu chí</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Cấu hình màu sắc hoàng gia (Warm Amber/Burgundy) -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        burgundy: {
+                            50: '#fdf3f4',
+                            100: '#fbe5e8',
+                            600: '#9f1239', // Đỏ mận chính
+                            700: '#881337',
+                            900: '#4c0519',
+                        },
+                        amber: {
+                            50: '#fffbeb',
+                            100: '#fef3c7',
+                            500: '#f59e0b', // Vàng ấm
+                            600: '#d97706',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        serif: ['Merriweather', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Tối ưu scrollbar mỏng nhẹ */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #fdf3f4; }
+        ::-webkit-scrollbar-thumb { background: #9f1239; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #881337; }
+        /* Tắt highlight xanh khi chạm trên mobile */
+        * { -webkit-tap-highlight-color: transparent; }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-800 antialiased overflow-x-hidden m-0 p-0 font-sans">
+
+    <!-- Container chính: Tràn viền trên mobile, giới hạn độ rộng rất lớn trên PC (max-w-[1600px]) để tận dụng không gian -->
+    <div class="w-full max-w-[1600px] mx-auto p-1.5 sm:p-6 md:p-8">
+        
+        <!-- Header: Tăng kích thước chữ -->
+        <header class="text-center mb-4 sm:mb-10">
+            <h1 class="text-2xl sm:text-4xl md:text-5xl font-serif font-bold text-burgundy-900 mb-2">
+                Criteria Explanation Handbook
+            </h1>
+            <p class="text-base sm:text-xl text-burgundy-700 italic font-serif">
+                Cẩm nang Giải thích Ý nghĩa Tiêu chí Chấm điểm
+            </p>
+        </header>
+
+        <!-- Lưới (Grid): Tự động chia 1 cột (Mobile), 2 cột (Tablet), 3 hoặc 4 cột (Màn hình lớn) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6">
+
+            <!-- THẺ 1: Overall appearance -->
+            <div class="bg-white rounded-lg shadow-sm border border-burgundy-100 flex flex-col h-full p-3 sm:p-6">
+                <div class="flex justify-between items-start mb-3">
+                    <div class="pr-3">
+                        <h2 class="text-lg sm:text-2xl font-bold text-burgundy-900 leading-tight">1. Overall appearance of the three dishes</h2>
+                        <h3 class="text-sm sm:text-base text-burgundy-600 italic mt-1">Tổng thể ngoại hình của 3 món ăn</h3>
+                    </div>
+                    <button onclick="speakText(this)" class="shrink-0 p-2 sm:p-2.5 bg-burgundy-50 text-burgundy-700 hover:bg-burgundy-100 rounded-md transition-colors flex items-center gap-1 border border-burgundy-200" title="Listen (EN)">
+                        <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
+                    </button>
+                </div>
+                <div class="mb-4">
+                    <p class="text-base sm:text-lg font-medium text-stone-700 leading-snug">Assess whether the entire menu setup is harmonious. Do the dishes visually complement each other in style and layout?</p>
+                    <p class="text-sm sm:text-base text-stone-500 italic mt-1.5">Đánh giá xem tổng thể mâm/bàn tiệc của đội có hài hòa không, các món có bổ trợ thiết kế cho nhau không.</p>
+                </div>
+                <!-- Checklist -->
+                <div class="mt-auto bg-stone-50/80 rounded-md p-3 sm:p-5 border border-stone-100">
+                    <div class="flex items-center gap-2 mb-2">
+                        <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+                        <h4 class="text-sm sm:text-base font-bold text-stone-700 uppercase tracking-wider">Checklist</h4>
+                    </div>
+                    <ul class="space-y-2">
+                        <li class="flex items-start gap-2">
+                            <svg class="w-4 h-4 text-burgundy-600 mt-1 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                            <div>
+                                <p class="text-base sm:text-lg text-stone-800 leading-tight">Do the 3 dishes look like they belong to the same concept?</p>
+                                <p class="text-sm sm:text-base text-stone-500 italic mt-1">3 món ăn đặt cạnh nhau có đồng nhất về phong cách không?</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- THẺ 2: Colour combination -->
+            <div class="bg-white rounded-lg shadow-sm border border-burgundy-100 flex flex-col h-full p-3 sm:p-6">
+                <div class="flex justify-between items-start mb-3">
+                    <div class="pr-3">
+                        <h2 class="text-lg sm:text-2xl font-bold text-burgundy-900 leading-tight">2. Colour combination</h2>
+                        <h3 class="text-sm sm:text-base text-burgundy-600 italic mt-1">Sự kết hợp màu sắc</h3>
+                    </div>
+                    <button onclick="speakText(this)" class="shrink-0 p-2 sm:p-2.5 bg-burgundy-50 text-burgundy-700 hover:bg-burgundy-100 rounded-md transition-colors flex items-center gap-1 border border-burgundy-200" title="Listen (EN)">
+                        <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
+                    </button>
+                </div>
+                <div class="mb-4">
+                    <p class="text-base sm:text-lg font-medium text-stone-700 leading-snug">Evaluate the natural color coordination of ingredients to stimulate appetite. Avoid monotonous palettes or overly contrasting colors.</p>
+                    <p class="text-sm sm:text-base text-stone-500 italic mt-1.5">Cách phối màu tự nhiên của nguyên liệu để kích thích thị giác, tránh đơn điệu hoặc chói mắt.</p>
+                </div>
+                <div class="mt-auto bg-stone-50/80 rounded-md p-3 sm:p-5 border border-stone-100">
+                    <div class="flex items-center gap-2 mb-2">
+                        <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+                        <h4 class="text-sm sm:text-base font-bold text-stone-700 uppercase tracking-wider">Checklist</h4>
+                    </div>
+                    <ul class="space-y-2">
+                        <li class="flex items-start gap-2">
+                            <svg class="w-4 h-4 text-burgundy-600 mt-1 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                            <div>
+                                <p class="text-base sm:text-lg text-stone-800 leading-tight">Are the colors natural from ingredients (avoiding obvious artificial coloring)?</p>
+                                <p class="text-sm sm:text-base text-stone-500 italic mt-1">Màu sắc có tự nhiên từ nguyên liệu không (tránh dùng phẩm màu lộ liễu)?</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <svg class="w-4 h-4 text-burgundy-600 mt-1 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                            <div>
+                                <p class="text-base sm:text-lg text-stone-800 leading-tight">Is the dish visually striking without being washed out?</p>
+                                <p class="text-sm sm:text-base text-stone-500 italic mt-1">Đĩa thức ăn có bị nhợt nhạt, một màu hay không?</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- THẺ 3: Appropriate garnishing -->
+            <div class="bg-white rounded-lg shadow-sm border border-burgundy-100 flex flex-col h-full p-3 sm:p-6">
+                <div class="flex justify-between items-start mb-3">
+                    <div class="pr-3">
+                        <h2 class="text-lg sm:text-2xl font-bold text-burgundy-900 leading-tight">3. Appropriate garnishing</h2>
+                        <h3 class="text-sm sm:text-base text-burgundy-600 italic mt-1">Trang trí phù hợp</h3>
+                    </div>
+                    <button onclick="speakText(this)" class="shrink-0 p-2 sm:p-2.5 bg-burgundy-50 text-burgundy-700 hover:bg-burgundy-100 rounded-md transition-colors flex items-center gap-1 border border-burgundy-200" title="Listen (EN)">
+                        <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
+                    </button>
+                </div>
+                <div class="mb-4">
+                    <p class="text-base sm:text-lg font-medium text-stone-700 leading-snug">Garnishes must be edible, relevant, and enhance the dish's flavor. Avoid cliché or meaningless decorations.</p>
+                    <p class="text-sm sm:text-base text-stone-500 italic mt-1.5">Nguyên tắc đồ trang trí phải ăn được, phải liên quan và tôn vinh hương vị món ăn (tránh rập khuôn).</p>
+                </div>
+                <div class="mt-auto bg-stone-50/80 rounded-md p-3 sm:p-5 border border-stone-100">
+                    <div class="flex items-center gap-2 mb-2">
+                        <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+                        <h4 class="text-sm sm:text-base font-bold text-stone-700 uppercase tracking-wider">Checklist</h4>
+                    </div>
+                    <ul class="space-y-2">
+                        <li class="flex items-start gap-2">
+                            <svg class="w-4 h-4 text-burgundy-600 mt-1 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                            <div>
+                                <p class="text-base sm:text-lg text-stone-800 leading-tight">Are the garnishes on the plate fully edible?</p>
+                                <p class="text-sm sm:text-base text-stone-500 italic mt-1">Đồ trang trí trên đĩa có ăn được không?</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <svg class="w-4 h-4 text-burgundy-600 mt-1 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                            <div>
+                                <p class="text-base sm:text-lg text-stone-800 leading-tight">Does the flavor of the garnish complement the main dish?</p>
+                                <p class="text-sm sm:text-base text-stone-500 italic mt-1">Hương vị đồ trang trí có hợp với món chính không?</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- THẺ 4: Eye appeal -->
+            <div class="bg-white rounded-lg shadow-sm border border-burgundy-100 flex flex-col h-full p-3 sm:p-6">
+                <div class="flex justify-between items-start mb-3">
+                    <div class="pr-3">
+                        <h2 class="text-lg sm:text-2xl font-bold text-burgundy-900 leading-tight">4. Eye appeal</h2>
+                        <h3 class="text-sm sm:text-base text-burgundy-600 italic mt-1">Sức hấp dẫn thị giác</h3>
+                    </div>
+                    <button onclick="speakText(this)" class="shrink-0 p-2 sm:p-2.5 bg-burgundy-50 text-burgundy-700 hover:bg-burgundy-100 rounded-md transition-colors flex items-center gap-1 border border-burgundy-200" title="Listen (EN)">
+                        <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
+                    </button>
+                </div>
+                <div class="mb-4">
+                    <p class="text-base sm:text-lg font-medium text-stone-700 leading-snug">The initial "Wow" factor. Does the presentation immediately provoke an appetite and capture attention?</p>
+                    <p class="text-sm sm:text-base text-stone-500 italic mt-1.5">Hiệu ứng "Wow" đầu tiên khi đĩa ăn được bưng ra, có tạo cảm giác thèm ăn lập tức không.</p>
+                </div>
+                <div class="mt-auto bg-stone-50/80 rounded-md p-3 sm:p-5 border border-stone-100">
+                    <div class="flex items-center gap-2 mb-2">
+                        <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+                        <h4 class="text-sm sm:text-base font-bold text-stone-700 uppercase tracking-wider">Checklist</h4>
+                    </div>
+                    <ul class="space-y-2">
+                        <li class="flex items-start gap-2">
+                            <svg class="w-4 h-4 text-burgundy-600 mt-1 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                            <div>
+                                <p class="text-base sm:text-lg text-stone-800 leading-tight">Does the dish look appetizing right away?</p>
+                                <p class="text-sm sm:text-base text-stone-500 italic mt-1">Nhìn đĩa thức ăn có muốn ăn ngay lập tức không?</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- THẺ 5: Cleanliness of presentation -->
+            <div class="bg-white rounded-lg shadow-sm border border-burgundy-100 flex flex-col h-full p-3 sm:p-6">
+                <div class="flex justify-between items-start mb-3">
+                    <div class="pr-3">
+                        <h2 class="text-lg sm:text-2xl font-bold text-burgundy-900 leading-tight">5. Cleanliness of presentation</h2>
+                        <h3 class="text-sm sm:text-base text-burgundy-600 italic mt-1">Vệ sinh khi trình bày</h3>
+                    </div>
+                    <button onclick="speakText(this)" class="shrink-0 p-2 sm:p-2.5 bg-burgundy-50 text-burgundy-700 hover:bg-burgundy-100 rounded-md transition-colors flex items-center gap-1 border border-burgundy-200" title="Listen (EN)">
+                        <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
+                    </button>
+                </div>
+                <div class="mb-4">
+                    <p class="text-base sm:text-lg font-medium text-stone-700 leading-snug">Crucial industry standard: The plate must be pristine, free of fingerprints, smudges, or accidental sauce drips on the rim.</p>
+                    <p class="text-sm sm:text-base text-stone-500 italic mt-1.5">Tiêu chuẩn tối quan trọng: Đĩa sạch bong, không vân tay, không lem xốt ngoài viền.</p>
+                </div>
+                <div class="mt-auto bg-stone-50/80 rounded-md p-3 sm:p-5 border border-stone-100">
+                    <div class="flex items-center gap-2 mb-2">
+                        <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+                        <h4 class="text-sm sm:text-base font-bold text-stone-700 uppercase tracking-wider">Checklist</h4>
+                    </div>
+                    <ul class="space-y-2">
+                        <li class="flex items-start gap-2">
+                            <svg class="w-4 h-4 text-burgundy-600 mt-1 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                            <div>
+                                <p class="text-base sm:text-lg text-stone-800 leading-tight">Inspect the rim: Are there any fingerprints or smudges?</p>
+                                <p class="text-sm sm:text-base text-stone-500 italic mt-1">Soi kỹ viền đĩa có vết vân tay hay vết ố không?</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <svg class="w-4 h-4 text-burgundy-600 mt-1 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                            <div>
+                                <p class="text-base sm:text-lg text-stone-800 leading-tight">Is the sauce neatly placed without unwanted spills?</p>
+                                <p class="text-sm sm:text-base text-stone-500 italic mt-1">Xốt có bị tràn, nhỏ giọt bừa bãi ra ngoài không?</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- THẺ 6: Meet industry standards -->
+            <div class="bg-white rounded-lg shadow-sm border border-burgundy-100 flex flex-col h-full p-3 sm:p-6">
+                <div class="flex justify-between items-start mb-3">
+                    <div class="pr-3">
+                        <h2 class="text-lg sm:text-2xl font-bold text-burgundy-900 leading-tight">6. Meet industry standards</h2>
+                        <h3 class="text-sm sm:text-base text-burgundy-600 italic mt-1">Đạt tiêu chuẩn ngành nghề</h3>
+                    </div>
+                    <button onclick="speakText(this)" class="shrink-0 p-2 sm:p-2.5 bg-burgundy-50 text-burgundy-700 hover:bg-burgundy-100 rounded-md transition-colors flex items-center gap-1 border border-burgundy-200" title="Listen (EN)">
+                        <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
+                    </button>
+                </div>
+                <div class="mb-4">
+                    <p class="text-base sm:text-lg font-medium text-stone-700 leading-snug">Adherence to commercial kitchen basics: correct doneness of proteins, appropriate serving temperature, and uniform knife cuts.</p>
+                    <p class="text-sm sm:text-base text-stone-500 italic mt-1.5">Đạt chuẩn bếp thương mại: độ chín chuẩn, nhiệt độ phục vụ, cắt thái đều tay.</p>
+                </div>
+                <div class="mt-auto bg-stone-50/80 rounded-md p-3 sm:p-5 border border-stone-100">
+                    <div class="flex items-center gap-2 mb-2">
+                        <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+                        <h4 class="text-sm sm:text-base font-bold text-stone-700 uppercase tracking-wider">Checklist</h4>
+                    </div>
+                    <ul class="space-y-2">
+                        <li class="flex items-start gap-2">
+                            <svg class="w-4 h-4 text-burgundy-600 mt-1 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                            <div>
+                                <p class="text-base sm:text-lg text-stone-800 leading-tight">Is the meat/seafood cooked to the correct doneness?</p>
+                                <p class="text-sm sm:text-base text-stone-500 italic mt-1">Thịt/hải sản có đạt đúng độ chín tiêu chuẩn không?</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <svg class="w-4 h-4 text-burgundy-600 mt-1 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                            <div>
+                                <p class="text-base sm:text-lg text-stone-800 leading-tight">Are the ingredients cut uniformly?</p>
+                                <p class="text-sm sm:text-base text-stone-500 italic mt-1">Các nguyên liệu có được cắt thái đồng đều không?</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- THẺ 7: Taste -->
+            <div class="bg-white rounded-lg shadow-sm border border-burgundy-100 flex flex-col h-full p-3 sm:p-6">
+                <div class="flex justify-between items-start mb-3">
+                    <div class="pr-3">
+                        <h2 class="text-lg sm:text-2xl font-bold text-burgundy-900 leading-tight">7. Taste of at least 1 item</h2>
+                        <h3 class="text-sm sm:text-base text-burgundy-600 italic mt-1">Hương vị của ít nhất 1 món</h3>
+                    </div>
+                    <button onclick="speakText(this)" class="shrink-0 p-2 sm:p-2.5 bg-burgundy-50 text-burgundy-700 hover:bg-burgundy-100 rounded-md transition-colors flex items-center gap-1 border border-burgundy-200" title="Listen (EN)">
+                        <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
+                    </button>
+                </div>
+                <div class="mb-4">
+                    <p class="text-base sm:text-lg font-medium text-stone-700 leading-snug">Examine the balance of fundamental flavors (sweet, sour, salty, bitter, umami) and the variety of textures (crispy, soft, smooth).</p>
+                    <p class="text-sm sm:text-base text-stone-500 italic mt-1.5">Sự cân bằng vị (chua, cay, mặn, ngọt, béo) và cấu trúc món ăn (giòn, mềm, mịn).</p>
+                </div>
+                <div class="mt-auto bg-stone-50/80 rounded-md p-3 sm:p-5 border border-stone-100">
+                    <div class="flex items-center gap-2 mb-2">
+                        <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+                        <h4 class="text-sm sm:text-base font-bold text-stone-700 uppercase tracking-wider">Checklist</h4>
+                    </div>
+                    <ul class="space-y-2">
+                        <li class="flex items-start gap-2">
+                            <svg class="w-4 h-4 text-burgundy-600 mt-1 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                            <div>
+                                <p class="text-base sm:text-lg text-stone-800 leading-tight">Are the flavors well-balanced without being overly salty or sweet?</p>
+                                <p class="text-sm sm:text-base text-stone-500 italic mt-1">Vị có hài hòa không, có bị quá mặn hay quá ngọt không?</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <svg class="w-4 h-4 text-burgundy-600 mt-1 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                            <div>
+                                <p class="text-base sm:text-lg text-stone-800 leading-tight">Is there a good contrast in textures (e.g., something crispy with something soft)?</p>
+                                <p class="text-sm sm:text-base text-stone-500 italic mt-1">Có sự tương phản về cấu trúc khi nhai không (VD: giòn đi kèm mềm)?</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Script xử lý Text-to-Speech (Chỉ đọc Tiếng Anh) -->
+    <script>
+        let currentUtterance = null;
+
+        function speakText(buttonElement) {
+            // Hủy giọng đọc cũ nếu đang chạy
+            if (window.speechSynthesis.speaking) {
+                window.speechSynthesis.cancel();
+                if (currentUtterance && currentUtterance.button === buttonElement) {
+                    currentUtterance = null;
+                    return; // Nhấp lần 2 để tắt
+                }
+            }
+
+            const card = buttonElement.closest('div.bg-white');
+            if (!card) return;
+
+            // Thu thập CHỈ các text tiếng Anh (Bỏ qua các thẻ có class italic - chứa tiếng Việt)
+            let englishParts = [];
+            
+            // 1. Tiêu đề
+            const title = card.querySelector('h2');
+            if (title) englishParts.push(title.innerText.replace(/^\d+\.\s*/, '')); // Bỏ số thứ tự
+            
+            // 2. Mô tả tiếng Anh (thẻ p đầu tiên không có class italic)
+            const desc = card.querySelector('div.mb-3 > p:not(.italic)');
+            if (desc) englishParts.push(desc.innerText);
+            
+            // 3. Checklist tiếng Anh (các thẻ p không có class italic bên trong ul)
+            const checklistItems = card.querySelectorAll('ul li p:not(.italic)');
+            checklistItems.forEach(item => {
+                englishParts.push(item.innerText);
+            });
+
+            const textToSpeak = englishParts.join('. ');
+
+            const utterance = new SpeechSynthesisUtterance(textToSpeak);
+            utterance.lang = 'en-US';
+            utterance.rate = 0.9; // Tốc độ đọc vừa phải, dễ nghe
+            utterance.pitch = 1;
+            
+            // Lưu lại nút đang phát
+            utterance.button = buttonElement;
+            currentUtterance = utterance;
+
+            // Thêm hiệu ứng màu sắc cho nút khi đang đọc
+            buttonElement.classList.add('bg-burgundy-600', 'text-white');
+            buttonElement.classList.remove('bg-burgundy-50', 'text-burgundy-700');
+
+            utterance.onend = () => {
+                buttonElement.classList.remove('bg-burgundy-600', 'text-white');
+                buttonElement.classList.add('bg-burgundy-50', 'text-burgundy-700');
+                currentUtterance = null;
+            };
+
+            window.speechSynthesis.speak(utterance);
+        }
+    </script>
+</body>
+</html>

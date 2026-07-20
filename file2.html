@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Culinary English - Luyện Phát Âm Tiêu Chí Chấm Điểm</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        pastel: {
+                            bg: '#FFF8F3',      /* Nền màu kem ấm */
+                            card: '#FFFFFF',    /* Nền thẻ trắng */
+                            primary: '#F08A5D', /* Cam ấm chủ đạo */
+                            secondary: '#B83B5E', /* Đỏ mận tạo điểm nhấn */
+                            accent: '#FFD3B6',  /* Vàng đào pastel */
+                            text: '#2D4059',    /* Xanh đen dịu mắt cho chữ */
+                            tip: '#FFF2F2'      /* Nền hồng nhạt cho phần mẹo */
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        ipa: ['"Times New Roman"', 'serif'] // Font có chân giúp ký tự IPA rõ ràng hơn
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: theme('colors.pastel.bg');
+            color: theme('colors.pastel.text');
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(240, 138, 93, 0.2), 0 8px 10px -6px rgba(240, 138, 93, 0.1);
+        }
+
+        .play-btn {
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-color 0.2s ease;
+        }
+
+        .play-btn:active {
+            transform: scale(0.9);
+        }
+
+        /* Tùy chỉnh thanh cuộn cho đẹp mắt */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FFF8F3; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #FFD3B6; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #F08A5D; 
+        }
+    </style>
+</head>
+<body class="min-h-screen p-2 sm:p-4 md:p-8 font-sans">
+
+    <header class="max-w-5xl mx-auto mb-5 text-center pt-4 md:pt-8">
+        <div class="inline-block p-2 md:p-3 bg-pastel-accent rounded-full mb-3 shadow-sm">
+            <svg class="w-8 h-8 md:w-10 md:h-10 text-pastel-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+            </svg>
+        </div>
+        <h1 class="text-2xl md:text-4xl lg:text-5xl font-bold text-pastel-secondary mb-2">
+            Culinary Grading Criteria
+        </h1>
+        <p class="text-sm md:text-lg text-gray-600 max-w-2xl mx-auto px-2">
+            Luyện phát âm chuẩn các tiêu chí chấm điểm ẩm thực. Bấm vào biểu tượng loa để nghe giọng đọc bản xứ và xem mẹo phát âm chi tiết.
+        </p>
+    </header>
+
+    <main class="max-w-7xl mx-auto">
+        <!-- Container chứa các thẻ (cards) -->
+        <div id="criteria-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+            <!-- Các thẻ sẽ được render bằng JavaScript tại đây -->
+        </div>
+    </main>
+
+    <footer class="max-w-5xl mx-auto mt-12 text-center pb-8 text-gray-500 text-sm">
+        <p>© 2026 Culinary English Learning. Developed for Culinary Students.</p>
+        <div class="mt-4 text-gray-600 bg-gray-100/50 inline-block p-4 rounded-xl border border-gray-200 text-left max-w-2xl mx-auto shadow-sm">
+            <strong class="text-pastel-secondary block mb-1">📌 Lưu ý về công nghệ:</strong> 
+            Chất lượng giọng đọc (Text-to-Speech) và tính năng <strong>chấm điểm phát âm (Speech Recognition)</strong> phụ thuộc vào Web Speech API của trình duyệt. Hãy sử dụng <strong class="text-pastel-primary">Google Chrome</strong> trên máy tính hoặc điện thoại Android để có kết quả tốt nhất. <br/>
+            <em class="text-[0.8rem] text-gray-500 mt-2 block">*Đây là công cụ hỗ trợ sinh viên tự luyện tập nhận diện từ vựng ở mức cơ bản, không thay thế cho các phần mềm đánh giá phát âm âm vị học (phonetics) chuyên sâu.</em>
+        </div>
+    </footer>
+
+    <script>
+        // Dữ liệu các tiêu chí ẩm thực (Đóng vai trò như một cơ sở dữ liệu nhỏ)
+        const criteriaData = [
+            {
+                id: 1,
+                english: "Overall appearance of the three dishes",
+                ipa: "/ˌəʊvərˈɔːl əˈpɪərəns əv ðə θriː ˈdɪʃɪz/",
+                vietnamese: "Tổng quan trình bày của ba món ăn",
+                tip: "💡 <strong class='font-semibold'>Mẹo:</strong> Nối âm phụ âm cuối chữ <em>'Overall'</em> với chữ <em>'appearance'</em> (/ˌəʊvərˈɔːl_əˈpɪərəns/). Nhấn trọng âm rõ vào các từ <em>Overall</em>, <em>appearance</em> và <em>dishes</em>.",
+                example: {
+                    en: "The overall appearance of the three dishes must be harmonious and visually striking.",
+                    vn: "Tổng quan trình bày của ba món ăn phải hài hòa và nổi bật về mặt thị giác (sự liên kết giữa các món trong menu)."
+                }
+            },
+            {
+                id: 2,
+                english: "Colour combination",
+                ipa: "/ˈkʌlər ˌkɒmbɪˈneɪʃən/",
+                vietnamese: "Sự kết hợp màu sắc",
+                tip: "💡 <strong class='font-semibold'>Mẹo:</strong> Nhấn trọng âm vào âm tiết đầu của <em>'Colour'</em> và âm tiết thứ ba của <em>'combination'</em>. Chú ý uốn môi tạo âm đuôi <em>/ʃən/</em>.",
+                example: {
+                    en: "A vibrant colour combination can significantly elevate the diner's experience.",
+                    vn: "Sự kết hợp màu sắc rực rỡ có thể nâng tầm đáng kể trải nghiệm của thực khách."
+                }
+            },
+            {
+                id: 3,
+                english: "Appropriate garnishing",
+                ipa: "/əˈprəʊpriət ˈɡɑːnɪʃɪŋ/",
+                vietnamese: "Trang trí phù hợp (rau thơm, xốt...)",
+                tip: "💡 <strong class='font-semibold'>Mẹo:</strong> Chú ý cụm phụ âm <em>/pr/</em> trong <em>'Appropriate'</em> và âm <em>/ʃɪŋ/</em> trong <em>'garnishing'</em>. Nhấn âm 2 của <em>Appropriate</em> và âm 1 của <em>garnishing</em>.",
+                example: {
+                    en: "Appropriate garnishing should enhance the flavor profile, not just decorate the plate.",
+                    vn: "Trang trí phù hợp nên tôn lên tổng thể hương vị, chứ không chỉ đơn thuần là làm đẹp đĩa ăn (quy tắc garnish phải ăn được)."
+                }
+            },
+            {
+                id: 4,
+                english: "Eye appeal",
+                ipa: "/aɪ əˈpiːl/",
+                vietnamese: "Tính bắt mắt, hấp dẫn thị giác",
+                tip: "💡 <strong class='font-semibold'>Mẹo:</strong> Nối âm <em>/aɪ/</em> trong <em>'Eye'</em> sang âm <em>/ə/</em> trong <em>'appeal'</em>, đọc lướt nhanh phần đầu và nhấn mạnh vào chữ <em>'peal'</em>. Chú ý âm <em>/l/</em> đẩy lưỡi lên ngạc cứng ở cuối.",
+                example: {
+                    en: "The dessert has exceptional eye appeal thanks to the glossy chocolate glaze.",
+                    vn: "Món tráng miệng có tính hấp dẫn thị giác đặc biệt nhờ lớp men sô-cô-la bóng loáng."
+                }
+            },
+            {
+                id: 5,
+                english: "Cleanliness of presentation",
+                ipa: "/ˈklenlinəs əv ˌprezənˈteɪʃən/",
+                vietnamese: "Sự sạch sẽ, gọn gàng trong cách trình bày",
+                tip: "💡 <strong class='font-semibold'>Mẹo:</strong> Nối âm <em>/s/</em> của <em>'Cleanliness'</em> với <em>'of'</em> (/əv/). Chú ý đuôi <em>/ʃən/</em> của <em>'presentation'</em>. Nhấn âm đầu <em>'Clean'</em>.",
+                example: {
+                    en: "Always wipe the rim of the plate before serving to ensure the cleanliness of presentation.",
+                    vn: "Luôn lau sạch viền đĩa trước khi phục vụ để đảm bảo sự gọn gàng, sạch sẽ (quy tắc vệ sinh cơ bản trước khi ra món)."
+                }
+            },
+            {
+                id: 6,
+                english: "Meet industry standards",
+                ipa: "/miːt ˈɪndəstri ˈstændədz/",
+                vietnamese: "Đạt tiêu chuẩn ngành (Nhà hàng/Khách sạn)",
+                tip: "💡 <strong class='font-semibold'>Mẹo:</strong> Chú ý âm <em>/t/</em> chặn cuối của <em>'Meet'</em>. Bật rõ âm <em>/dz/</em> ở cuối chữ <em>'standards'</em>. Trọng âm rơi vào <em>Meet</em>, <em>in-</em> và <em>stan-</em>.",
+                example: {
+                    en: "Your cooking techniques and portion sizes must strictly meet industry standards.",
+                    vn: "Kỹ thuật chế biến và định lượng khẩu phần của bạn phải đáp ứng nghiêm ngặt các tiêu chuẩn ngành (tính đồng đều, chuyên nghiệp)."
+                }
+            },
+            {
+                id: 7,
+                english: "Taste of at least 1 item",
+                ipa: "/teɪst əv ət liːst wʌn ˈaɪtəm/",
+                vietnamese: "Hương vị của ít nhất một món",
+                tip: "💡 <strong class='font-semibold'>Mẹo:</strong> Đọc số 1 là 'one'. Nối âm <em>/st/</em> của <em>'Taste'</em> sang <em>'of'</em>. Bật rõ các phụ âm cuối <em>/st/</em> trong <em>'least'</em>. Chữ <em>'item'</em> đọc là /ˈaɪtəm/ (nhấn âm đầu).",
+                example: {
+                    en: "The judging panel will carefully evaluate the taste of at least one item from your set menu.",
+                    vn: "Ban giám khảo sẽ đánh giá kỹ lưỡng hương vị của ít nhất một món trong thực đơn chọn sẵn của bạn."
+                }
+            }
+        ];
+
+        function renderCards() {
+            const container = document.getElementById('criteria-container');
+            
+            criteriaData.forEach((item, index) => {
+                // Tạo một the div cho thẻ card
+                const card = document.createElement('div');
+                card.className = "bg-pastel-card rounded-2xl p-4 md:p-6 border border-orange-100 card-hover flex flex-col h-full shadow-sm";
+                
+                // Cấu trúc HTML bên trong thẻ
+                card.innerHTML = `
+                    <div class="flex justify-between items-start gap-2 mb-3">
+                        <h2 class="text-lg md:text-xl font-bold text-pastel-secondary leading-tight flex-1">
+                            ${index + 1}. ${item.english}
+                        </h2>
+                        <div class="flex gap-1.5 flex-shrink-0">
+                            <!-- Nút Ghi âm (Micro) -->
+                            <button 
+                                id="mic-btn-${item.id}"
+                                onclick="startPractice(${item.id}, '${item.english.replace(/'/g, "\\'")}')" 
+                                class="play-btn w-9 h-9 md:w-10 md:h-10 bg-white border border-gray-200 hover:bg-red-50 text-gray-400 hover:text-red-500 rounded-full flex items-center justify-center cursor-pointer shadow-sm focus:outline-none transition-colors duration-200"
+                                aria-label="Luyện đọc"
+                                title="Bấm để ghi âm luyện đọc"
+                            >
+                                <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
+                                </svg>
+                            </button>
+                            <!-- Nút Nghe (Loa) -->
+                            <button 
+                                onclick="speakText('${item.english.replace(/'/g, "\\'")}')" 
+                                class="play-btn w-9 h-9 md:w-10 md:h-10 bg-pastel-accent hover:bg-pastel-primary hover:text-white text-pastel-secondary rounded-full flex items-center justify-center cursor-pointer shadow-sm focus:outline-none focus:ring-4 focus:ring-orange-200"
+                                aria-label="Nghe phát âm"
+                                title="Nghe phát âm"
+                            >
+                                <svg class="w-4 h-4 md:w-5 md:h-5 ml-0.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217zM14.657 2.929a1 1 0 011.414 0A9.972 9.972 0 0119 10a9.972 9.972 0 01-2.929 7.071 1 1 0 01-1.414-1.414A7.971 7.971 0 0017 10c0-2.21-.894-4.208-2.343-5.657a1 1 0 010-1.414zm-2.829 2.828a1 1 0 011.415 0A5.983 5.983 0 0115 10a5.984 5.984 0 01-1.757 4.243 1 1 0 01-1.415-1.415A3.984 3.984 0 0013 10a3.983 3.983 0 00-1.172-2.828 1 1 0 010-1.415z" clip-rule="evenodd"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <span class="inline-block bg-gray-100 text-gray-600 px-2 py-1 rounded-md text-[0.8rem] md:text-sm font-ipa tracking-wide">
+                            ${item.ipa}
+                        </span>
+                    </div>
+                    
+                    <div class="mb-3 flex-1">
+                        <p class="text-pastel-text font-medium text-[0.95rem] md:text-[1.05rem]">
+                            🇻🇳 ${item.vietnamese}
+                        </p>
+                    </div>
+
+                    <!-- Phần ví dụ thực tế được bổ sung -->
+                    <div class="mb-3 bg-white p-2.5 md:p-3 rounded-lg border border-orange-50 shadow-sm">
+                        <div class="flex justify-between items-start gap-2 mb-1">
+                            <p class="text-[0.85rem] md:text-sm font-semibold text-pastel-text flex-1 leading-snug">
+                                <span class="text-[0.6rem] md:text-[0.65rem] font-bold text-gray-400 uppercase tracking-widest block mb-1">Ví dụ thực tế</span>
+                                "${item.example.en}"
+                            </p>
+                            <button 
+                                onclick="speakText('${item.example.en.replace(/'/g, "\\'")}')" 
+                                class="play-btn flex-shrink-0 w-7 h-7 bg-orange-50 hover:bg-pastel-primary hover:text-white text-pastel-primary rounded-full flex items-center justify-center cursor-pointer focus:outline-none mt-1"
+                                aria-label="Nghe câu ví dụ"
+                                title="Nghe câu ví dụ"
+                            >
+                                <svg class="w-3.5 h-3.5 ml-0.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217zM14.657 2.929a1 1 0 011.414 0A9.972 9.972 0 0119 10a9.972 9.972 0 01-2.929 7.071 1 1 0 01-1.414-1.414A7.971 7.971 0 0017 10c0-2.21-.894-4.208-2.343-5.657a1 1 0 010-1.414zm-2.829 2.828a1 1 0 011.415 0A5.983 5.983 0 0115 10a5.984 5.984 0 01-1.757 4.243 1 1 0 01-1.415-1.415A3.984 3.984 0 0013 10a3.983 3.983 0 00-1.172-2.828 1 1 0 010-1.415z" clip-rule="evenodd"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        <p class="text-[0.75rem] md:text-[0.8rem] text-gray-500 italic mt-1 leading-relaxed">
+                            ${item.example.vn}
+                        </p>
+                    </div>
+                    
+                    <div class="bg-pastel-tip p-3 rounded-xl border border-red-50 text-[0.8rem] md:text-sm text-gray-700 leading-relaxed">
+                        ${item.tip}
+                    </div>
+
+                    <!-- Khu vực hiển thị kết quả luyện phát âm -->
+                    <div id="practice-result-${item.id}" class="hidden mt-3 transition-all duration-300"></div>
+                `;
+                
+                container.appendChild(card);
+            });
+        }
+
+        // Khởi tạo biến lưu trữ danh sách giọng đọc
+        let voices = [];
+
+        // Hàm tải danh sách giọng đọc (cần thiết vì các trình duyệt tải voices không đồng bộ)
+        function loadVoices() {
+            voices = window.speechSynthesis.getVoices();
+        }
+
+        // Lắng nghe sự kiện khi danh sách giọng đọc đã sẵn sàng
+        if (typeof speechSynthesis !== 'undefined' && speechSynthesis.onvoiceschanged !== undefined) {
+            speechSynthesis.onvoiceschanged = loadVoices;
+        }
+
+        // Hàm thực thi việc đọc văn bản
+        function speakText(text) {
+            // Kiểm tra xem trình duyệt có hỗ trợ Web Speech API không
+            if (!('speechSynthesis' in window)) {
+                alert("Rất tiếc, trình duyệt của bạn không hỗ trợ tính năng đọc văn bản (Web Speech API). Hãy thử bằng Google Chrome hoặc Safari.");
+                return;
+            }
+
+            // Hủy các lệnh đọc đang chờ trước đó (tránh bị kẹt)
+            window.speechSynthesis.cancel();
+
+            // Khởi tạo đối tượng SpeechSynthesisUtterance
+            const utterance = new SpeechSynthesisUtterance(text);
+            
+            // Xử lý text đặc biệt: đổi '1' thành 'one' để đọc chuẩn xác hơn
+            if (text.includes("1 item")) {
+                utterance.text = text.replace("1 item", "one item");
+            }
+
+            // Thiết lập ngôn ngữ tiếng Anh (Mỹ hoặc Anh)
+            utterance.lang = 'en-US';
+            utterance.rate = 0.9; // Tốc độ đọc chậm lại một chút để học sinh dễ nghe (1.0 là bình thường)
+            utterance.pitch = 1.0; // Độ cao giọng bình thường
+
+            // Cố gắng tìm một giọng đọc tiếng Anh nữ hoặc giọng chuẩn nếu có
+            if (voices.length === 0) {
+                voices = window.speechSynthesis.getVoices();
+            }
+            
+            // Ưu tiên giọng Google US English, hoặc các giọng tiếng Anh khác
+            const englishVoice = voices.find(voice => 
+                voice.name.includes('Google US English') || 
+                voice.name.includes('Google UK English') ||
+                (voice.lang.startsWith('en') && voice.name.includes('Female'))
+            );
+
+            if (englishVoice) {
+                utterance.voice = englishVoice;
+            }
+
+            // Phát âm thanh
+            window.speechSynthesis.speak(utterance);
+        }
+
+        async function startPractice(id, targetText) {
+            const micBtn = document.getElementById(`mic-btn-${id}`);
+            const resultDiv = document.getElementById(`practice-result-${id}`);
+            
+            // Dừng mọi âm thanh đang đọc để tránh ghi âm lại âm thanh của máy
+            window.speechSynthesis.cancel();
+
+            // Reset toàn bộ giao diện UI của các nút mic khác
+            document.querySelectorAll('[id^="mic-btn-"]').forEach(btn => {
+                btn.classList.remove('bg-red-100', 'text-red-500', 'animate-pulse', 'border-red-300');
+            });
+            
+            // Hiển thị trạng thái đang yêu cầu quyền
+            resultDiv.classList.remove('hidden');
+            resultDiv.innerHTML = `
+                <div class="p-3 rounded-lg border border-blue-200 bg-blue-50 flex items-center gap-2 text-[0.85rem] md:text-sm text-blue-700">
+                    <svg class="animate-spin h-4 w-4 text-blue-500 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                    Đang kết nối... Bấm "Cho phép" (Allow) trên thông báo của trình duyệt nhé!
+                </div>`;
+
+            // BƯỚC 1: Chủ động xin quyền Microphone để kích hoạt popup của trình duyệt
+            try {
+                // Lệnh này bắt buộc trình duyệt phải nảy thông báo cấp quyền cho website
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                // Có quyền rồi thì tắt stream đi, để dành Mic cho API SpeechRecognition xử lý
+                stream.getTracks().forEach(track => track.stop());
+            } catch (err) {
+                // Chạy vào đây nếu người dùng bấm Block, hoặc nhúng Iframe bị chặn
+                resultDiv.innerHTML = `
+                    <div class="p-3 rounded-lg border border-red-200 bg-red-50 text-red-600 text-[0.85rem] md:text-sm">
+                        ❌ <b>Lỗi truy cập Micro:</b> Không thể nghe được giọng của bạn. <br>
+                        <span class="text-xs opacity-80 mt-1 block">Chi tiết: ${err.message}. Hãy cấp quyền (Allow Microphone) cho trang web rồi thử lại.</span>
+                    </div>`;
+                return; // Ngắt hàm
+            }
+
+            // BƯỚC 2: Khởi tạo SpeechRecognition sau khi chắc chắn đã có quyền
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            
+            if (!SpeechRecognition) {
+                resultDiv.innerHTML = `<div class="p-3 rounded-lg border border-red-200 bg-red-50 text-red-600 text-sm">❌ Trình duyệt của bạn không hỗ trợ tính năng này. Hãy thử bằng Chrome/Edge/Safari mới nhất.</div>`;
+                return;
+            }
+
+            // Tạo instance mới mỗi lần bấm để tránh bị kẹt trạng thái (InvalidStateError)
+            const recognition = new SpeechRecognition();
+            recognition.lang = 'en-US';
+            recognition.interimResults = false;
+            recognition.maxAlternatives = 1;
+
+            // Chuyển UI sang trạng thái Đang Nghe
+            micBtn.classList.add('bg-red-100', 'text-red-500', 'animate-pulse', 'border-red-300');
+            resultDiv.innerHTML = `
+                <div class="p-3 rounded-lg border border-red-100 bg-red-50 flex items-center gap-2 text-[0.85rem] md:text-sm text-red-700 font-medium">
+                    <span class="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse shadow-[0_0_5px_rgba(239,68,68,0.8)] flex-shrink-0"></span> 
+                    Đang nghe... Hãy đọc to tiêu chí tiếng Anh.
+                </div>`;
+
+            // Xử lý khi có kết quả trả về
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                evaluatePronunciation(id, transcript, targetText);
+            };
+
+            // Xử lý lỗi trong quá trình thu âm
+            recognition.onerror = (event) => {
+                micBtn.classList.remove('bg-red-100', 'text-red-500', 'animate-pulse', 'border-red-300');
+                
+                let errorMsg = "Lỗi thu âm.";
+                if (event.error === 'not-allowed') errorMsg = "Bị từ chối quyền Micro.";
+                else if (event.error === 'no-speech') errorMsg = "Không nghe thấy tiếng. Vui lòng đọc sát micro hơn.";
+                else if (event.error === 'network') errorMsg = "Cần kết nối Internet để chấm điểm.";
+                
+                resultDiv.innerHTML = `<div class="p-3 rounded-lg border border-red-200 bg-red-50 text-red-600 text-[0.85rem] md:text-sm">❌ ${errorMsg} (${event.error})</div>`;
+            };
+
+            // Xử lý khi kết thúc thu âm (dù có kết quả hay lỗi)
+            recognition.onspeechend = () => {
+                recognition.stop();
+                micBtn.classList.remove('bg-red-100', 'text-red-500', 'animate-pulse', 'border-red-300');
+            };
+
+            // Bắt đầu ghi âm
+            try {
+                recognition.start();
+            } catch(e) {
+                console.error("Lỗi khởi động Recognition:", e);
+                resultDiv.innerHTML = `<div class="p-3 rounded-lg border border-red-200 bg-red-50 text-red-600 text-sm">❌ Lỗi hệ thống khi bật micro. Vui lòng thử lại.</div>`;
+            }
+        }
+
+        function evaluatePronunciation(id, spokenText, targetText) {
+            const resultDiv = document.getElementById(`practice-result-${id}`);
+            
+            // Hàm chuẩn hóa chuỗi (xóa dấu câu, chuyển chữ thường)
+            const normalize = (str) => {
+                // Đổi số 1 thành one để dễ khớp hơn với lời nói
+                str = str.replace(/1/g, "one");
+                return str.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").trim();
+            }
+            
+            const spokenWords = normalize(spokenText).split(/\s+/);
+            const targetWords = normalize(targetText).split(/\s+/);
+            
+            let matchCount = 0;
+            let highlightedResult = [];
+
+            // Thuật toán chấm điểm đơn giản: Kiểm tra xem các từ trong câu mục tiêu có xuất hiện trong câu người dùng đọc không
+            targetWords.forEach(word => {
+                if (spokenWords.includes(word)) {
+                    matchCount++;
+                    // Từ đúng -> Bôi xanh
+                    highlightedResult.push(`<span class="text-green-600 font-semibold">${word}</span>`);
+                } else {
+                    // Từ sai/thiếu -> Gạch chân đỏ
+                    highlightedResult.push(`<span class="text-red-500 font-semibold underline decoration-red-300 decoration-2 underline-offset-2">${word}</span>`);
+                }
+            });
+
+            const accuracy = Math.round((matchCount / targetWords.length) * 100);
+            
+            let feedbackClass = "bg-green-50 border-green-200 text-green-800";
+            let message = "Tuyệt vời! Bạn phát âm rất rõ chữ.";
+            
+            if (accuracy < 50) {
+                feedbackClass = "bg-red-50 border-red-200 text-red-800";
+                message = "Cần luyện tập thêm. Chú ý các từ đỏ.";
+            } else if (accuracy < 80) {
+                feedbackClass = "bg-orange-50 border-orange-200 text-orange-800";
+                message = "Khá tốt! Nhấn nhá rõ hơn các từ đỏ nhé.";
+            }
+
+            // Cập nhật UI hiển thị kết quả (giảm padding và text size trên mobile)
+            resultDiv.innerHTML = `
+                <div class="p-3 md:p-4 rounded-xl border ${feedbackClass} text-[0.85rem] md:text-sm shadow-sm transition-all">
+                    <div class="flex justify-between items-center border-b border-black/5 pb-2 mb-2">
+                        <strong class="text-[0.95rem] md:text-[1.05rem]">Độ chính xác: ${accuracy}%</strong>
+                        <span class="text-[0.65rem] md:text-[0.7rem] px-2 py-1 bg-white rounded-md shadow-sm border border-black/10 font-medium text-center">${message}</span>
+                    </div>
+                    <div class="mb-2 text-[0.75rem] md:text-[0.8rem] text-gray-500 opacity-80">
+                        Hệ thống nghe được: <i>"${spokenText || "Không rõ tiếng"}"</i>
+                    </div>
+                    <div class="text-[0.85rem] md:text-[0.95rem] leading-relaxed tracking-wide">
+                        Đối chiếu chuẩn: ${highlightedResult.join(' ')}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Chạy hàm render khi trang web vừa tải xong
+        window.addEventListener('DOMContentLoaded', () => {
+            renderCards();
+            // Kích hoạt load giọng đọc trước để khi bấm nút không bị trễ
+            loadVoices();
+        });
+    </script>
+</body>
+</html>
