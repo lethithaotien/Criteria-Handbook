@@ -457,7 +457,7 @@
             const englishVoice = voices.find(voice => voice.lang.includes('en-US') || voice.lang.includes('en-GB'));
             if (englishVoice) utterance.voice = englishVoice;
             
-            utterance.rate = 0.85; // Đọc chậm một chút để dễ nghe
+            utterance.rate = 0.6; // Đọc rất chậm và rõ ràng để dễ nghe theo
 
             const speakerBtn = event.currentTarget;
             speakerBtn.classList.add('speaking');
