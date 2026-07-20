@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Food Critic Flashcards</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -23,26 +23,29 @@
             }
         }
     </script>
+    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
         body {
             font-family: 'Inter', sans-serif;
             background-color: #f3f4f6;
+            /* Cố định chiều cao chuẩn xác trên cả iOS/Android */
+            min-height: 100dvh;
         }
 
-        /* 3D Flip Card Styles */
+        /* 3D Flip Card Core Structure */
         .flip-card {
             background-color: transparent;
-            perspective: 1000px; /* Cung cấp độ sâu 3D */
+            perspective: 1000px;
             cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .flip-card-inner {
             position: relative;
             width: 100%;
             height: 100%;
-            text-align: center;
             transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
             transform-style: preserve-3d;
         }
@@ -51,197 +54,198 @@
             transform: rotateY(180deg);
         }
 
+        /* Front & Back Faces */
         .flip-card-front, .flip-card-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
             -webkit-backface-visibility: hidden;
             backface-visibility: hidden;
-            border-radius: 1rem;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 2rem;
+            border-radius: 1.25rem;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
             background-color: white;
-            overflow: hidden; /* Prevent content from overflowing rounded corners */
-        }
-
-        .flip-card-front {
-            /* Mặt trước */
+            overflow: hidden;
         }
 
         .flip-card-back {
-            /* Mặt sau */
             transform: rotateY(180deg);
-            background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
-            border: 1px solid #e5e7eb;
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border: 1px solid #e2e8f0;
         }
 
-        /* Custom Scrollbar for back content if it gets too long */
+        /* Custom Scrollbar for smooth reading on small screens */
         .content-scroll {
-            overflow-y: auto;
-            max-height: 100%;
-            width: 100%;
             scrollbar-width: thin;
+            scrollbar-color: #cbd5e1 transparent;
         }
         
         .content-scroll::-webkit-scrollbar {
-            width: 6px;
+            width: 4px;
+        }
+        
+        .content-scroll::-webkit-scrollbar-track {
+            background: transparent;
         }
         
         .content-scroll::-webkit-scrollbar-thumb {
             background-color: #cbd5e1;
-            border-radius: 3px;
+            border-radius: 10px;
         }
 
-        /* Hover effects on buttons */
+        /* Micro-interactions */
         .btn-hover-effect {
-            transition: all 0.2s ease-in-out;
-        }
-        .btn-hover-effect:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: all 0.2s ease;
         }
         .btn-hover-effect:active {
-            transform: translateY(0);
+            transform: scale(0.95);
         }
 
-        /* Pulse animation for the speaker icon */
+        /* Speaker Pulse Animation */
         @keyframes pulse-ring {
-            0% { transform: scale(0.8); opacity: 0.5; }
-            100% { transform: scale(1.3); opacity: 0; }
+            0% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(79, 70, 229, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0); }
         }
         
-        .speaking .fa-volume-high {
-            color: #4f46e5;
-            animation: pulse-ring 1s infinite cubic-bezier(0.215, 0.61, 0.355, 1);
+        .speaking {
+            animation: pulse-ring 1.5s infinite;
+            background-color: #e0e7ff !important;
+            color: #4338ca !important;
         }
-
     </style>
 </head>
-<body class="min-h-screen min-h-[100dvh] flex flex-col p-4 sm:p-8">
 
-    <div class="max-w-2xl w-full flex-1 sm:flex-none mx-auto my-auto flex flex-col gap-4 sm:gap-6">
+<body class="flex flex-col items-center">
+
+    <!-- Container giới hạn chiều rộng và tự động chiếm không gian dọc -->
+    <div class="max-w-xl w-full flex-1 flex flex-col p-4 sm:p-6 mx-auto gap-4">
         
         <!-- Header & Filters -->
-        <div class="text-center space-y-4">
-            <h1 class="text-3xl font-bold text-gray-800">Food Critic Phrases</h1>
-            <p class="text-gray-500 text-sm">Học cách nhận xét ẩm thực như một chuyên gia</p>
+        <div class="flex-none text-center space-y-3">
+            <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 tracking-tight">Food Critic Phrases</h1>
             
             <!-- Filters -->
             <div class="flex justify-center gap-2 flex-wrap" id="filters">
-                <button onclick="filterCards('all')" class="filter-btn active px-4 py-2 rounded-full text-sm font-medium bg-primary text-white transition-colors duration-200" data-filter="all">Tất cả</button>
-                <button onclick="filterCards('compliment')" class="filter-btn px-4 py-2 rounded-full text-sm font-medium bg-white text-gray-600 hover:bg-gray-100 border border-gray-200 transition-colors duration-200" data-filter="compliment">Lời khen</button>
-                <button onclick="filterCards('critique')" class="filter-btn px-4 py-2 rounded-full text-sm font-medium bg-white text-gray-600 hover:bg-gray-100 border border-gray-200 transition-colors duration-200" data-filter="critique">Góp ý</button>
+                <button onclick="filterCards('all')" class="filter-btn px-4 py-1.5 rounded-full text-sm font-medium bg-primary text-white shadow-sm transition-colors" data-filter="all">Tất cả</button>
+                <button onclick="filterCards('compliment')" class="filter-btn px-4 py-1.5 rounded-full text-sm font-medium bg-white text-gray-600 hover:bg-gray-50 border border-gray-200 transition-colors" data-filter="compliment">Lời khen</button>
+                <button onclick="filterCards('critique')" class="filter-btn px-4 py-1.5 rounded-full text-sm font-medium bg-white text-gray-600 hover:bg-gray-50 border border-gray-200 transition-colors" data-filter="critique">Góp ý</button>
             </div>
         </div>
 
         <!-- Progress Bar -->
-        <div class="w-full">
-            <div class="flex justify-between text-xs font-semibold text-gray-500 mb-1">
+        <div class="flex-none w-full px-1">
+            <div class="flex justify-between text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wider">
                 <span>Tiến trình</span>
                 <span id="progress-text">1 / 10</span>
             </div>
-            <div class="w-full bg-gray-200 rounded-full h-2.5">
-                <div id="progress-bar" class="bg-primary h-2.5 rounded-full transition-all duration-300 ease-out" style="width: 10%"></div>
+            <div class="w-full bg-gray-200 rounded-full h-2">
+                <div id="progress-bar" class="bg-primary h-2 rounded-full transition-all duration-500 ease-out" style="width: 10%"></div>
             </div>
         </div>
 
-        <!-- Flashcard Container -->
-        <!-- Sử dụng flex-1 để thẻ tự động kéo giãn lấp đầy khoảng trống dọc trên mobile, giữ chiều cao cố định trên desktop -->
-        <div class="relative w-full flex-1 sm:flex-none min-h-[350px] sm:h-[420px]">
-            <div id="flashcard" class="flip-card w-full h-full" onclick="toggleFlip()">
-                <div class="flip-card-inner" id="flashcard-inner">
+        <!-- Khu vực thẻ: flex-1 để chiếm mọi không gian còn lại trên đt dọc. 
+             min-h-[350px] để đảm bảo trên PC vẫn đủ cao -->
+        <div class="relative w-full flex-1 min-h-[400px] my-2">
+            
+            <!-- Thiết lập Absolute để thẻ fix cứng theo khung bao ngoài, sửa lỗi sập layout di động -->
+            <div id="flashcard" class="flip-card absolute inset-0 w-full h-full" onclick="toggleFlip(event)">
+                <div class="flip-card-inner">
                     
-                    <!-- Mặt trước (Front) -->
-                    <div class="flip-card-front">
-                        <div class="absolute top-4 right-4">
-                            <span id="card-badge" class="px-3 py-1 text-xs font-bold rounded-full bg-green-100 text-green-800">Khen ngợi</span>
+                    <!-- MẶT TRƯỚC -->
+                    <div class="flip-card-front absolute inset-0 w-full h-full flex flex-col">
+                        <!-- Header (Nhãn) -->
+                        <div class="flex-none w-full p-4 flex justify-end">
+                            <span id="card-badge" class="px-3 py-1 text-[11px] font-bold uppercase tracking-wider rounded-full bg-green-100 text-green-800 border border-green-200">Khen ngợi</span>
                         </div>
                         
-                        <div class="flex flex-col items-center justify-center h-full space-y-4 px-4 pb-8">
+                        <!-- Middle (Nội dung tự cuộn) -->
+                        <div class="content-scroll flex-1 overflow-y-auto px-5 sm:px-8 flex flex-col justify-center items-center gap-3">
                             <h2 id="english-text" class="text-2xl sm:text-3xl font-bold text-gray-800 text-center leading-tight">
                                 Loading...
                             </h2>
-                            <p id="ipa-text" class="text-lg text-gray-500 font-mono italic">
+                            <p id="ipa-text" class="text-sm sm:text-base text-gray-400 font-mono italic text-center">
                                 /.../
                             </p>
-                            <div class="mt-2 w-full max-w-md">
-                                <p id="english-explanation-text" class="text-sm text-gray-600 text-center bg-gray-50 px-4 py-3 rounded-lg border border-gray-100 shadow-inner">
+                            
+                            <!-- Bổ sung Giải thích tiếng Anh -->
+                            <div class="w-full max-w-sm mt-2">
+                                <p id="english-explanation-text" class="text-xs sm:text-sm text-gray-600 text-center bg-gray-50 px-4 py-3 rounded-xl border border-gray-100 leading-relaxed shadow-inner">
                                     Explanation loading...
                                 </p>
                             </div>
                         </div>
                         
-                        <!-- Speaker Button - Stop propagation to avoid flipping when clicking speaker -->
-                        <button onclick="speakText(event)" class="absolute bottom-6 left-1/2 transform -translate-x-1/2 p-4 rounded-full bg-indigo-50 text-primary hover:bg-indigo-100 transition-colors btn-hover-effect focus:outline-none" aria-label="Phát âm">
-                            <i class="fa-solid fa-volume-high text-xl"></i>
-                        </button>
-                        
-                        <div class="absolute bottom-4 right-4 text-gray-300">
-                            <i class="fa-solid fa-rotate text-sm"></i> Chạm để lật
+                        <!-- Footer (Nút bấm, luôn cố định đáy) -->
+                        <div class="flex-none w-full p-5 flex justify-center items-end relative">
+                            <!-- Nút phát âm (stopPropagation để không lật thẻ khi bấm) -->
+                            <button onclick="speakText(event)" class="w-14 h-14 rounded-full bg-indigo-50 text-primary hover:bg-indigo-100 transition-all btn-hover-effect focus:outline-none z-10 flex items-center justify-center shadow-sm border border-indigo-100" aria-label="Phát âm">
+                                <i class="fa-solid fa-volume-high text-xl"></i>
+                            </button>
+                            
+                            <!-- Gợi ý lật -->
+                            <div class="absolute bottom-5 right-5 text-gray-300 text-xs flex flex-col items-end opacity-70">
+                                <i class="fa-solid fa-rotate mb-1"></i> Lật
+                            </div>
                         </div>
                     </div>
                     
-                    <!-- Mặt sau (Back) -->
-                    <div class="flip-card-back">
-                        <div class="content-scroll flex flex-col items-center justify-center text-center p-4 w-full h-full">
-                            <h3 id="vietnamese-text" class="text-xl sm:text-2xl font-semibold text-gray-800 mb-6">
+                    <!-- MẶT SAU -->
+                    <div class="flip-card-back absolute inset-0 w-full h-full flex flex-col">
+                        <!-- Scrollable Content -->
+                        <div class="content-scroll flex-1 overflow-y-auto p-6 sm:p-8 flex flex-col justify-center">
+                            <h3 id="vietnamese-text" class="text-xl sm:text-2xl font-bold text-primary text-center mb-5 leading-snug">
                                 Đang tải...
                             </h3>
                             
-                            <div class="w-full h-px bg-gray-200 mb-6"></div>
+                            <div class="w-full h-px bg-gray-200 mb-5 flex-none"></div>
                             
-                            <div class="text-left w-full space-y-3">
-                                <h4 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-2">Giải thích chi tiết:</h4>
+                            <div class="w-full max-w-sm mx-auto">
+                                <h4 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3 flex items-center gap-2">
+                                    <i class="fa-solid fa-lightbulb"></i> Giải thích chi tiết
+                                </h4>
                                 <div id="explanation-text" class="text-gray-700 text-sm sm:text-base leading-relaxed space-y-2">
-                                    <!-- Nội dung giải thích sẽ được chèn qua JS -->
+                                    <!-- JS sẽ nạp nội dung vào đây -->
                                 </div>
                             </div>
                         </div>
-                        <div class="absolute bottom-4 right-4 text-gray-300 bg-white bg-opacity-80 px-2 rounded">
-                            <i class="fa-solid fa-rotate text-sm"></i> Chạm để lật lại
+                        
+                        <!-- Footer mặt sau -->
+                        <div class="flex-none w-full p-4 flex justify-end bg-gradient-to-t from-gray-50 to-transparent">
+                            <div class="text-gray-400 text-xs flex items-center gap-1.5 bg-white/90 px-3 py-1.5 rounded-full shadow-sm backdrop-blur border border-gray-100">
+                                <i class="fa-solid fa-rotate"></i> Chạm để quay lại
+                            </div>
                         </div>
                     </div>
+                    
                 </div>
             </div>
         </div>
 
         <!-- Navigation Buttons -->
-        <div class="flex justify-between items-center mt-2">
-            <button onclick="prevCard()" id="prev-btn" class="flex items-center gap-2 px-6 py-3 bg-white text-gray-700 border border-gray-300 rounded-lg font-medium hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed btn-hover-effect transition-all">
-                <i class="fa-solid fa-arrow-left"></i> Trước
+        <div class="flex-none flex justify-between items-center mt-1">
+            <button onclick="prevCard()" id="prev-btn" class="flex-1 max-w-[140px] flex items-center justify-center gap-2 px-4 py-3 bg-white text-gray-700 border border-gray-200 rounded-xl font-medium hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed btn-hover-effect shadow-sm">
+                <i class="fa-solid fa-arrow-left"></i> <span class="hidden sm:inline">Trước</span>
             </button>
-            <button onclick="nextCard()" id="next-btn" class="flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-lg font-medium hover:bg-indigo-600 shadow-md disabled:opacity-50 disabled:cursor-not-allowed btn-hover-effect transition-all">
-                Tiếp theo <i class="fa-solid fa-arrow-right"></i>
+            <button onclick="nextCard()" id="next-btn" class="flex-1 max-w-[140px] flex items-center justify-center gap-2 px-4 py-3 bg-primary text-white rounded-xl font-medium hover:bg-indigo-600 disabled:opacity-40 disabled:cursor-not-allowed btn-hover-effect shadow-md">
+                <span class="hidden sm:inline">Tiếp theo</span> <i class="fa-solid fa-arrow-right"></i>
             </button>
         </div>
         
-        <div class="text-center text-xs text-gray-400 mt-4">
-            <p>Mẹo: Bạn có thể dùng phím mũi tên Trái/Phải để chuyển thẻ.</p>
-        </div>
-
     </div>
 
     <script>
-        // Data for the flashcards
+        // Dữ liệu 10 câu Flashcard
         const flashcardsData = [
-            // Khen ngợi (Compliments)
             {
                 type: 'compliment',
                 english: "The presentation is an absolute feast for the eyes.",
                 ipa: "/ðə ˌprez.ənˈteɪ.ʃən ɪz ən ˈæb.sə.luːt fiːst fɔːr ði aɪz/",
-                englishExplanation: "<span class='font-semibold text-gray-700'>Feast for the eyes:</span> A visually pleasing or beautiful sight.",
+                englishExplanation: "<strong class='text-gray-800'>Feast for the eyes:</strong> A visually pleasing or beautiful sight.",
                 vietnamese: "Cách trình bày quả thực là một bữa tiệc mãn nhãn.",
-                explanation: "<strong>Feast for the eyes</strong>: Một cụm từ rất hay dùng để mô tả một thứ gì đó cực kỳ đẹp mắt, hấp dẫn về mặt thị giác, giống như một 'bữa tiệc' cho đôi mắt."
+                explanation: "<strong>Feast for the eyes</strong>: Dùng để mô tả một thứ gì đó cực kỳ đẹp mắt, hấp dẫn về mặt thị giác, giống như một 'bữa tiệc' cho đôi mắt."
             },
             {
                 type: 'compliment',
                 english: "I'm genuinely impressed by the depth of seasoning in this broth.",
                 ipa: "/aɪm ˈdʒen.ju.ɪn.li ɪmˈprest baɪ ðə depθ əv ˈsiː.zən.ɪŋ ɪn ðɪs brɒθ/",
-                englishExplanation: "<span class='font-semibold text-gray-700'>Depth of seasoning:</span> Complex and well-developed flavors from careful layering of ingredients.",
+                englishExplanation: "<strong class='text-gray-800'>Depth of seasoning:</strong> Complex and well-developed flavors from careful layering of ingredients.",
                 vietnamese: "Tôi thực sự ấn tượng bởi độ sâu của gia vị trong phần nước dùng này.",
                 explanation: "<strong>Depth of seasoning</strong>: Hàm ý gia vị không chỉ nêm nếm hời hợt bề mặt (như chỉ mặn hay ngọt), mà có nhiều tầng hương vị phức tạp, hòa quyện và được nấu kỹ."
             },
@@ -249,7 +253,7 @@
                 type: 'compliment',
                 english: "After a long day, this hearty stew really hit the spot.",
                 ipa: "/ˈɑːf.tər ə lɒŋ deɪ, ðɪs ˈhɑː.ti stjuː ˈrɪə.li hɪt ðə spɒt/",
-                englishExplanation: "<span class='font-semibold text-gray-700'>Hit the spot:</span> Provided exactly what was needed or desired, bringing great satisfaction.",
+                englishExplanation: "<strong class='text-gray-800'>Hit the spot:</strong> Provided exactly what was needed or desired, bringing great satisfaction.",
                 vietnamese: "Sau một ngày dài, món hầm thịnh soạn này thực sự đánh trúng tâm lý (rất thỏa mãn).",
                 explanation: "<strong>Hit the spot</strong>: Thành ngữ chỉ việc một món ăn/thức uống mang lại cảm giác thỏa mãn tột độ, đúng lúc đang thèm hoặc đang cần."
             },
@@ -257,7 +261,7 @@
                 type: 'compliment',
                 english: "The acidity in the vinaigrette perfectly balanced the richness of the duck.",
                 ipa: "/ði əˈsɪd.ə.ti ɪn ðə ˌvɪn.ɪˈɡret ˈpɜː.fekt.li ˈbæl.ənst ðə ˈrɪtʃ.nəs əv ðə dʌk/",
-                englishExplanation: "<span class='font-semibold text-gray-700'>Perfectly balanced:</span> An ideal harmony of different flavor profiles where no single element overpowers the others.",
+                englishExplanation: "<strong class='text-gray-800'>Perfectly balanced:</strong> An ideal harmony of different flavor profiles.",
                 vietnamese: "Độ chua trong nước sốt giấm đã cân bằng hoàn hảo độ ngậy của thịt vịt.",
                 explanation: "<strong>Perfectly balanced</strong>: Khen ngợi sự hài hòa. Trong ẩm thực, việc cân bằng các vị (chua, cay, mặn, ngọt, ngậy) là kỹ năng quan trọng nhất của đầu bếp."
             },
@@ -265,156 +269,134 @@
                 type: 'compliment',
                 english: "The sear on this scallop is textbook execution.",
                 ipa: "/ðə sɪər ɒn ðɪs ˈskɒl.əp ɪz ˈteks.bʊk ˌek.sɪˈkjuː.ʃən/",
-                englishExplanation: "<span class='font-semibold text-gray-700'>Textbook execution:</span> Performed flawlessly, exactly as it should be done according to standard rules.",
-                vietnamese: "Lớp vỏ áp chảo của miếng cồi sò điệp này là một kỹ thuật chuẩn mực như sách giáo khoa.",
+                englishExplanation: "<strong class='text-gray-800'>Textbook execution:</strong> Performed flawlessly, exactly as it should be done.",
+                vietnamese: "Lớp vỏ áp chảo của miếng sò điệp này là một kỹ thuật chuẩn mực như sách giáo khoa.",
                 explanation: "<strong>Textbook execution</strong>: Ám chỉ kỹ thuật nấu nướng quá hoàn hảo, chuẩn xác từng chi tiết giống hệt như lý thuyết trong sách giáo khoa dạy nấu ăn."
             },
-            // Góp ý (Critiques)
             {
                 type: 'critique',
                 english: "The dish needs an acidic element to balance the richness.",
                 ipa: "/ðə dɪʃ niːdz ən əˈsɪd.ɪk ˈel.ɪ.mənt tə ˈbæl.əns ðə ˈrɪtʃ.nəs/",
-                englishExplanation: "<span class='font-semibold text-gray-700'>Balance the richness:</span> To cut through the heavy, fatty, or creamy aspects of a dish using acidic or fresh elements.",
+                englishExplanation: "<strong class='text-gray-800'>Balance the richness:</strong> To cut through the heavy, fatty, or creamy aspects using acidic elements.",
                 vietnamese: "Món ăn cần thêm một chút vị chua để cân bằng lại độ ngấy.",
                 explanation: "<strong>Balance the richness</strong>: Góp ý tinh tế khi món ăn bị ngấy (do nhiều dầu mỡ, bơ, béo). Yêu cầu thêm 'acid' (như chanh, giấm) để làm dịu lại."
             },
             {
                 type: 'critique',
-                english: "Unfortunately, the delicate flavor of the fish is completely lost; it's vastly over-seasoned.",
-                ipa: "/ʌnˈfɔː.tʃən.ət.li, ðə ˈdel.ɪ.kət ˈfleɪ.vər əv ðə fɪʃ ɪz kəmˈpliːt.li lɒst; ɪts ˈvɑːst.li ˌəʊ.vəˈsiː.zənd/",
-                englishExplanation: "<span class='font-semibold text-gray-700'>Over-seasoned:</span> Contains too much salt or spices, masking the natural flavors of the main ingredients.",
-                vietnamese: "Đáng tiếc là hương vị tinh tế của cá đã biến mất hoàn toàn; nó bị nêm nếm quá đậm vị.",
+                english: "Unfortunately, the delicate flavor of the fish is vastly over-seasoned.",
+                ipa: "/ʌnˈfɔː.tʃən.ət.li, ðə ˈdel.ɪ.kət ˈfleɪ.vər əv ðə fɪʃ ɪz ˈvɑːst.li ˌəʊ.vəˈsiː.zənd/",
+                englishExplanation: "<strong class='text-gray-800'>Over-seasoned:</strong> Contains too much salt or spices, masking natural flavors.",
+                vietnamese: "Đáng tiếc là hương vị tinh tế của cá đã bị nêm nếm quá đậm vị.",
                 explanation: "<strong>Over-seasoned</strong>: Lời chê khéo léo thay vì nói 'quá mặn'. Nó ngụ ý đầu bếp đã lạm dụng gia vị làm át đi hương vị tự nhiên của nguyên liệu chính."
             },
             {
                 type: 'critique',
-                english: "The plating is a bit cluttered; it could benefit from more negative space.",
-                ipa: "/ðə ˈpleɪ.tɪŋ ɪz ə bɪt ˈklʌt.əd; ɪt kʊd ˈben.ɪ.fɪt frəm mɔːr ˈneɡ.ə.tɪv speɪs/",
-                englishExplanation: "<span class='font-semibold text-gray-700'>Negative space:</span> Empty space on the plate left intentionally blank to highlight the food and create visual elegance.",
-                vietnamese: "Cách trình bày hơi lộn xộn; nó sẽ tốt hơn nếu có thêm khoảng trống trên đĩa.",
+                english: "The plating is cluttered; it could benefit from more negative space.",
+                ipa: "/ðə ˈpleɪ.tɪŋ ɪz ˈklʌt.əd; ɪt kʊd ˈben.ɪ.fɪt frəm mɔːr ˈneɡ.ə.tɪv speɪs/",
+                englishExplanation: "<strong class='text-gray-800'>Negative space:</strong> Empty space on the plate left blank to highlight the food.",
+                vietnamese: "Cách trình bày bị lộn xộn; nó sẽ tốt hơn nếu có thêm khoảng trống trên đĩa.",
                 explanation: "<strong>Negative space</strong>: Thuật ngữ mượn từ nghệ thuật thị giác. Trong bày trí món ăn, để lại khoảng trắng (đĩa trống) giúp tôn lên chủ thể món ăn thay vì bày la liệt."
             },
             {
                 type: 'critique',
-                english: "There seems to be a lack of proper temperature control; the purée is served cold.",
-                ipa: "/ðeər siːmz tə bi ə læk əv ˈprɒp.ər ˈtem.prə.tʃər kənˈtrəʊl; ðə ˈpjʊə.reɪ ɪz sɜːvd kəʊld/",
-                englishExplanation: "<span class='font-semibold text-gray-700'>Temperature control:</span> The precise management of heat, ensuring food is served at its optimal temperature.",
-                vietnamese: "Dường như có sự thiếu kiểm soát nhiệt độ đúng mức; sốt nghiền lại được phục vụ khi đã nguội lạnh.",
+                english: "There is a lack of temperature control; the purée is served cold.",
+                ipa: "/ðeər ɪz ə læk əv ˈtem.prə.tʃər kənˈtrəʊl; ðə ˈpjʊə.reɪ ɪz sɜːvd kəʊld/",
+                englishExplanation: "<strong class='text-gray-800'>Temperature control:</strong> Ensuring food is served at its optimal heat level.",
+                vietnamese: "Thiếu sự kiểm soát nhiệt độ; sốt nghiền lại được phục vụ khi đã nguội lạnh.",
                 explanation: "<strong>Temperature control</strong>: Chỉ trích về mặt kỹ thuật phục vụ. Món nóng phải ra nóng, món lạnh phải ra lạnh. Sốt nghiền (purée) thường phải giữ ấm."
             },
             {
                 type: 'critique',
                 english: "While the concept is intriguing, the textures are somewhat monotonic.",
                 ipa: "/waɪl ðə ˈkɒn.sept ɪz ɪnˈtriː.ɡɪŋ, ðə ˈteks.tʃəz ɑːr ˈsʌm.wɒt ˌmɒn.əˈtɒn.ɪk/",
-                englishExplanation: "<span class='font-semibold text-gray-700'>Monotonic textures:</span> Lacking variety in mouthfeel; feeling uniformly the same (e.g., all mushy) without contrast.",
+                englishExplanation: "<strong class='text-gray-800'>Monotonic textures:</strong> Lacking variety in mouthfeel; feeling uniformly the same.",
                 vietnamese: "Mặc dù ý tưởng khá thú vị, nhưng kết cấu món ăn lại có phần đơn điệu.",
-                explanation: "<strong>Monotonic textures</strong>: Món ăn thiếu đi sự đa dạng về cảm giác khi nhai (ví dụ: tất cả đều mềm nhũn, hoặc tất cả đều khô khan). Một món ngon thường cần có sự đan xen giữa mềm, giòn, dai."
+                explanation: "<strong>Monotonic textures</strong>: Món ăn thiếu đi sự đa dạng về cảm giác khi nhai (ví dụ: tất cả đều mềm nhũn, hoặc khô khan). Một món ngon cần đan xen giữa mềm, giòn, dai."
             }
         ];
 
-        // State variables
+        // Biến trạng thái
         let currentIndex = 0;
-        let currentFilter = 'all';
         let filteredCards = [...flashcardsData];
         let isFlipped = false;
 
-        // DOM Elements
-        const flashcardElement = document.getElementById('flashcard');
-        const englishTextElement = document.getElementById('english-text');
-        const ipaTextElement = document.getElementById('ipa-text');
-        const englishExplanationTextElement = document.getElementById('english-explanation-text');
-        const vietnameseTextElement = document.getElementById('vietnamese-text');
-        const explanationTextElement = document.getElementById('explanation-text');
-        const cardBadgeElement = document.getElementById('card-badge');
-        
-        const prevBtn = document.getElementById('prev-btn');
-        const nextBtn = document.getElementById('next-btn');
-        const progressBar = document.getElementById('progress-bar');
-        const progressText = document.getElementById('progress-text');
-        
         // Web Speech API
         const synth = window.speechSynthesis;
         let voices = [];
 
-        // Initialize the app
+        // Khởi tạo
         function init() {
-            // Populate voices when they are loaded (some browsers load asynchronously)
             if (speechSynthesis.onvoiceschanged !== undefined) {
-                speechSynthesis.onvoiceschanged = () => {
-                    voices = synth.getVoices();
-                };
+                speechSynthesis.onvoiceschanged = () => { voices = synth.getVoices(); };
             }
-            
             updateUI();
             
-            // Add keyboard navigation
+            // Lắng nghe phím mũi tên
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'ArrowRight') nextCard();
                 else if (e.key === 'ArrowLeft') prevCard();
-                else if (e.key === ' ' || e.key === 'Spacebar') {
-                    e.preventDefault(); // Prevent page scroll
-                    toggleFlip();
-                }
             });
         }
 
-        // Toggle card flip
-        function toggleFlip() {
+        // Lật thẻ
+        function toggleFlip(event) {
+            // Không lật nếu người dùng đang bôi đen chữ hoặc click vào nút mồ côi
+            if (window.getSelection().toString().length > 0) return;
+            
             isFlipped = !isFlipped;
+            const card = document.getElementById('flashcard');
             if (isFlipped) {
-                flashcardElement.classList.add('flipped');
+                card.classList.add('flipped');
             } else {
-                flashcardElement.classList.remove('flipped');
+                card.classList.remove('flipped');
             }
         }
 
-        // Ensure card is showing front before changing content
+        // Delay nội dung khi lật để text không bị ngược
         function resetFlipState(callback) {
             if (isFlipped) {
-                flashcardElement.classList.remove('flipped');
+                document.getElementById('flashcard').classList.remove('flipped');
                 isFlipped = false;
-                // Wait for flip animation to partially finish before changing content
-                setTimeout(callback, 300);
+                setTimeout(callback, 250); // Chờ thẻ úp lại rồi mới đổi chữ
             } else {
                 callback();
             }
         }
 
-        // Update UI with current card data
+        // Cập nhật giao diện
         function updateUI() {
             if (filteredCards.length === 0) return;
 
             const card = filteredCards[currentIndex];
+            const badge = document.getElementById('card-badge');
 
-            // Update Badge
+            // Set badge màu sắc
             if (card.type === 'compliment') {
-                cardBadgeElement.textContent = 'Khen ngợi';
-                cardBadgeElement.className = 'px-3 py-1 text-xs font-bold rounded-full bg-green-100 text-green-800 border border-green-200 shadow-sm';
+                badge.textContent = 'Khen ngợi';
+                badge.className = 'px-3 py-1 text-[11px] font-bold uppercase tracking-wider rounded-full bg-green-100 text-green-800 border border-green-200 shadow-sm';
             } else {
-                cardBadgeElement.textContent = 'Góp ý';
-                cardBadgeElement.className = 'px-3 py-1 text-xs font-bold rounded-full bg-orange-100 text-orange-800 border border-orange-200 shadow-sm';
+                badge.textContent = 'Góp ý';
+                badge.className = 'px-3 py-1 text-[11px] font-bold uppercase tracking-wider rounded-full bg-orange-100 text-orange-800 border border-orange-200 shadow-sm';
             }
 
-            // Update Text Content
-            englishTextElement.textContent = card.english;
-            ipaTextElement.textContent = card.ipa;
-            englishExplanationTextElement.innerHTML = card.englishExplanation;
-            vietnameseTextElement.textContent = card.vietnamese;
-            
-            // Allow HTML in explanation to parse <strong> tags
-            explanationTextElement.innerHTML = `<p>${card.explanation}</p>`;
+            // Gắn Text
+            document.getElementById('english-text').textContent = card.english;
+            document.getElementById('ipa-text').textContent = card.ipa;
+            document.getElementById('english-explanation-text').innerHTML = card.englishExplanation;
+            document.getElementById('vietnamese-text').textContent = card.vietnamese;
+            document.getElementById('explanation-text').innerHTML = `<p>${card.explanation}</p>`;
 
-            // Update Progress
-            const progressPercentage = ((currentIndex + 1) / filteredCards.length) * 100;
-            progressBar.style.width = `${progressPercentage}%`;
-            progressText.textContent = `${currentIndex + 1} / ${filteredCards.length}`;
+            // Thanh tiến trình
+            const progress = ((currentIndex + 1) / filteredCards.length) * 100;
+            document.getElementById('progress-bar').style.width = `${progress}%`;
+            document.getElementById('progress-text').textContent = `${currentIndex + 1} / ${filteredCards.length}`;
 
-            // Update Button States
-            prevBtn.disabled = currentIndex === 0;
-            nextBtn.disabled = currentIndex === filteredCards.length - 1;
+            // Cập nhật trạng thái nút (Disable nếu ở đầu/cuối)
+            document.getElementById('prev-btn').disabled = currentIndex === 0;
+            document.getElementById('next-btn').disabled = currentIndex === filteredCards.length - 1;
         }
 
-        // Navigation Functions
+        // Nút điều hướng
         function nextCard() {
             if (currentIndex < filteredCards.length - 1) {
                 resetFlipState(() => {
@@ -433,81 +415,61 @@
             }
         }
 
-        // Filtering Logic
+        // Bộ lọc danh mục
         function filterCards(type) {
-            // Stop speech if speaking
             synth.cancel();
             
-            // Update filter UI
+            // Đổi màu nút lọc
             document.querySelectorAll('.filter-btn').forEach(btn => {
                 if (btn.dataset.filter === type) {
-                    btn.classList.remove('bg-white', 'text-gray-600', 'hover:bg-gray-100');
-                    btn.classList.add('bg-primary', 'text-white');
+                    btn.classList.replace('bg-white', 'bg-primary');
+                    btn.classList.replace('text-gray-600', 'text-white');
+                    btn.classList.remove('hover:bg-gray-50', 'border');
                 } else {
-                    btn.classList.add('bg-white', 'text-gray-600', 'hover:bg-gray-100');
-                    btn.classList.remove('bg-primary', 'text-white');
+                    btn.classList.replace('bg-primary', 'bg-white');
+                    btn.classList.replace('text-white', 'text-gray-600');
+                    btn.classList.add('hover:bg-gray-50', 'border');
                 }
             });
 
-            // Update data
-            currentFilter = type;
+            // Lọc dữ liệu
             if (type === 'all') {
                 filteredCards = [...flashcardsData];
             } else {
                 filteredCards = flashcardsData.filter(card => card.type === type);
             }
 
-            // Reset state and update UI
             currentIndex = 0;
-            resetFlipState(() => {
-                updateUI();
-            });
+            resetFlipState(() => updateUI());
         }
 
-        // Text to Speech Functionality
+        // Phát âm
         function speakText(event) {
-            // Prevent event from bubbling up to the flashcard container causing it to flip
-            event.stopPropagation();
-            
+            event.stopPropagation(); // Ngăn sự kiện click lan ra ngoài làm lật thẻ
             if (filteredCards.length === 0) return;
             
-            const textToSpeak = filteredCards[currentIndex].english;
-            
-            // Stop current speech if any
             synth.cancel();
-
-            const utterance = new SpeechSynthesisUtterance(textToSpeak);
             
-            // Try to find a good English voice (preferably US or UK)
+            const utterance = new SpeechSynthesisUtterance(filteredCards[currentIndex].english);
             if (voices.length === 0) voices = synth.getVoices();
+            
+            // Ưu tiên giọng Anh-Mỹ hoặc Anh-Anh
             const englishVoice = voices.find(voice => voice.lang.includes('en-US') || voice.lang.includes('en-GB'));
+            if (englishVoice) utterance.voice = englishVoice;
             
-            if (englishVoice) {
-                utterance.voice = englishVoice;
-            }
-            
-            // Adjust properties for better pronunciation
-            utterance.rate = 0.85; // Slightly slower for clarity
-            utterance.pitch = 1;
+            utterance.rate = 0.85; // Đọc chậm một chút để dễ nghe
 
-            // Visual feedback
             const speakerBtn = event.currentTarget;
             speakerBtn.classList.add('speaking');
             
-            utterance.onend = () => {
-                speakerBtn.classList.remove('speaking');
-            };
-            
-            utterance.onerror = () => {
-                speakerBtn.classList.remove('speaking');
-            };
+            utterance.onend = () => speakerBtn.classList.remove('speaking');
+            utterance.onerror = () => speakerBtn.classList.remove('speaking');
 
             synth.speak(utterance);
         }
 
-        // Initialize when DOM is ready
+        // Khởi động khi tải xong trang
         window.addEventListener('DOMContentLoaded', init);
-
     </script>
     <!-- Bắt đầu phần menu điều hướng -->
 <div style="text-align: center; margin-top: 40px; margin-bottom: 20px; padding-top: 20px; border-top: 2px dashed #ccc;">
